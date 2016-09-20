@@ -1,0 +1,31 @@
+{
+  "main": "index.md",
+  "name": "misread-tsne",
+  "typewriter": {
+    "title": "Attention and Augmented Recurrent Neural Networks",
+    "description": "A visual overview of neural attention, and the powerful extensions being built on top of it.",
+    "url": "http://distill.pub/2016/augmented-rnns/",
+    "github": "https://github.com/distillpub/post--augmented-rnns",
+    "firstPublished": "Thu Sep 08 2016 10:27:05 GMT-0700 (PDT)",
+    "lastPublished": "Thu Sep 08 2016 10:27:05 GMT-0700 (PDT)",
+    "authors": [
+      {
+        "firstName": "Chris",
+        "lastName": "Olah",
+        "personalURL": "http://colah.github.io",
+        "affiliation": "Google Brain",
+        "affiliationURL": "http://g.co/brain"
+      },
+      {
+        "firstName": "Shan",
+        "lastName": "Carter",
+        "personalURL": "http://shancarter.com",
+        "affiliation": "Google Brain",
+        "affiliationURL": "http://g.co/brain"
+      }
+    ]
+  },
+  "dependencies": {
+    "d3": "^4.2.2"
+  }
+}
