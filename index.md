@@ -1,6 +1,5 @@
 <script src="assets/d3.min.js"></script>
 <script src="assets/tsne.js"></script>
-<script src="assets/demo-datas.js"></script>
 <script src="assets/demo-configs.js"></script>
 <script src="assets/playground.js"></script>
 
@@ -148,6 +147,6 @@ Five runs at perplexity 50, however, give results that (up to symmetry) are visu
 There's a reason that t-SNE has become so popular: it's incredibly flexible, and can often able to find structure where other dimensionality-reduction algorithms cannot. Unfortunately, that very flexibility makes it tricky to interpret t-SNE results. Out of sight from the user, the algorithm makes all sorts of adjustments that tidy up its visualizations.
 Don't let the hidden "magic" scare you away from the whole technique, though. The good news is that by studying how t-SNE behaves in simple cases, it's possible to develop an intuition for what's going on.
 
-<figure class="w-body"  id="playground">
+<figure class="w-page"  id="playground">
 {{> assets/playground.html}}
 </figure>

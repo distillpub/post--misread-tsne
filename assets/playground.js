@@ -67,6 +67,10 @@ function visualize(points, canvas, message, no3d) {
 var currentThread = 0;
 var running = true;
 
+var timescale = d3.scaleLinear()
+.domain([0, 20, 100, 200, 500, 6000])
+.range([200, 120, 70, 10, 0])
+
 // Show an animated t-SNE algorithm.
 function showTsne(points, canvas, message, perplexity, epsilon) {
   var options = {
@@ -90,12 +94,16 @@ function showTsne(points, canvas, message, perplexity, epsilon) {
       var solution = tsne.getSolution().map(function(coords, i) {
         return new Point(coords, points[i].color);
       });
-      visualize(solution, canvas, message);
+      visualize(solution, canvas, ""); //removed message
       document.getElementById('step').innerHTML = '' + step;
     }
     if(step >= 5000) return;
     if (thread == currentThread) {
-      window.requestAnimationFrame(improve);
+      var timeout = timescale(step)
+      //console.log(timeout)
+      setTimeout(function() {
+        window.requestAnimationFrame(improve);
+      }, timeout)
     }
   }
   improve();
@@ -124,7 +132,7 @@ function main() {
   // Utility function for creating value sliders.
   function makeSlider(container, name, min, max, start) {
     var label = document.createElement('text');
-    label.innerText = name;
+    label.innerText = name + ' ';
     container.appendChild(label);
     var currentValueLabel = document.createElement('text');
     currentValueLabel.innerText = start;
@@ -145,15 +153,34 @@ function main() {
 
   // Create menu of possible demos.
   var menuDiv = document.getElementById('data-menu');
-  demos.forEach(function(demo, i) {
-    var option = document.createElement('a');
-    option.innerText = demo.name;
-    option.onclick = function() {
-      showDemo(i);
-    }
-    menuDiv.appendChild(option);
-    menuDiv.appendChild(document.createElement('br'));
-  });
+
+  var dataMenus = d3.select("#data-menu").selectAll("div.demo-data").data(demos)
+    .enter().append("div").classed("demo-data", true)
+    .on("click", function(d,i) {
+      showDemo(i)
+    })
+  dataMenus
+    .append("span")
+    .text(function(d) { return d.name})
+  dataMenus.append("br")
+
+  dataMenus.append("canvas")
+  .attr("width", 300)
+  .attr("height", 300)
+  .style("width", '75px')
+  .style("height", '75px')
+  .each(function(d,i) {
+    var demo = demos[i];
+    var params = [demo.options[0].start]
+    if(demo.options[1]) params.push(demo.options[1].start)
+    var points = demo.generator.apply(null, params);
+    var canvas = d3.select(this).node()
+    visualize(points, canvas, null, null)
+
+  })
+
+
+
 
   // Set up t-SNE UI.
   var tsneUI = document.getElementById('tsne-options');

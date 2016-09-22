@@ -383,3 +383,4 @@ tSNE.prototype = {
 };
 
 tsnejs.tSNE = tSNE; // export tSNE class
+if(typeof module != "undefined")  module.exports = tsnejs
