@@ -2,24 +2,24 @@
   "main": "index.md",
   "name": "misread-tsne",
   "typewriter": {
-    "title": "Attention and Augmented Recurrent Neural Networks",
-    "description": "A visual overview of neural attention, and the powerful extensions being built on top of it.",
-    "url": "http://distill.pub/2016/augmented-rnns/",
+    "title": "How not to misread t-SNE plots",
+    "description": "",
+    "url": "http://distill.pub/2016/misread-tsne/",
     "github": "https://github.com/distillpub/post--augmented-rnns",
     "firstPublished": "Thu Sep 08 2016 10:27:05 GMT-0700 (PDT)",
     "lastPublished": "Thu Sep 08 2016 10:27:05 GMT-0700 (PDT)",
     "authors": [
       {
-        "firstName": "Chris",
-        "lastName": "Olah",
-        "personalURL": "http://colah.github.io",
+        "firstName": "Martin",
+        "lastName": "Wattenberg",
+        "personalURL": "http://www.bewitched.com/",
         "affiliation": "Google Brain",
         "affiliationURL": "http://g.co/brain"
       },
       {
-        "firstName": "Shan",
-        "lastName": "Carter",
-        "personalURL": "http://shancarter.com",
+        "firstName": "Fernanda",
+        "lastName": "Viégas",
+        "personalURL": "http://fernandaviegas.com/",
         "affiliation": "Google Brain",
         "affiliationURL": "http://g.co/brain"
       }
