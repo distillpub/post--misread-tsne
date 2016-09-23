@@ -655,4 +655,9 @@ var demos = [
   }
 ];
 
+var demosByName = {}
+demos.forEach(function(d,i) {
+  demosByName[d.name] = d;
+})
+
 if(typeof module != "undefined") module.exports = demos;

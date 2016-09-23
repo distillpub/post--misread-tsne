@@ -3,7 +3,6 @@
   <div class="original">
     <span class="caption">Original</span>
     <canvas class="tsne-plot"></canvas>
-    <a class="play">Play</a>
   </div>
   <div class="runners">
   </div>
@@ -11,16 +10,16 @@
 
 <script>
 (function() {
-  var dis = d3.select("#figures-01")
+  var dis = d3.select("#figures-02")
   var dataset = "Two Clusters"
   var demo = demosByName[dataset];
   var params = [50, 2]
   var examples = [
-    { perplexity: 2, epsilon: 10, dim: 2 },
-    { perplexity: 5, epsilon: 10, dim: 2 },
-    { perplexity: 30, epsilon: 10, dim: 2 },
-    { perplexity: 50, epsilon: 10, dim: 2 },
-    { perplexity: 100, epsilon: 10, dim: 2 },
+    { perplexity: 30, epsilon: 10, dim: 2, step: 10 },
+    { perplexity: 30, epsilon: 10, dim: 2, step: 20 },
+    { perplexity: 30, epsilon: 10, dim: 2, step: 60},
+    { perplexity: 30, epsilon: 10, dim: 2, step: 120 },
+    { perplexity: 30, epsilon: 10, dim: 2, step: 1000 },
   ]
   // original
   var originalCanvas = dis.select(".original .tsne-plot")
@@ -47,31 +46,13 @@
       var canvas = this;
       //var points = getPoints(demo, params)
       visualize(originalPoints, canvas)
+      runDemoSync(originalPoints, canvas, d, d.step);
     })
 
   runners.append("br")
-  runners.append("span").classed("caption", true).classed("step", true).text("Step 0")
+  runners.append("span").classed("caption", true).classed("step", true)
+    .text(function(d) { return "Step " + d.step})
 
-  dis.select(".original a.play").on("click", function() {
-    dis.select(".runners").selectAll("div.runner").each(function(d) {
-      var stepper = d3.select(this).select("span.step")
-      stepper
-        .text('Step 0')
-        .classed("done", false)
-
-      var canvas = d3.select(this).select("canvas").node();
-      //var points = getPoints(demo, params)
-      var stepCb = function(step) {
-        stepper.text('Step ' + step)
-      }
-      var doneCb = function() {
-        stepper.classed("done", true)
-      }
-      var runner = runDemo(originalPoints, canvas, d, 5000, stepCb, doneCb);
-      // enable us to pause a demo
-      d.runner = runner;
-    })
-  })
 
 })()
 </script>

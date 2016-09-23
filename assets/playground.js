@@ -27,7 +27,7 @@ function visualize(points, canvas, message, no3d) {
   var xExtent = d3.extent(points, function(p) {return p.coords[0]});
   var yExtent = d3.extent(points, function(p) {return p.coords[1]});
   var zExtent = d3.extent(points, function(p) {return p.coords[2]});
-  var zScale = d3.scaleLinear().domain(zExtent).range([2, 20]);
+  var zScale = d3.scaleLinear().domain(zExtent).range([2, 10]);
 
   var centerX = (xExtent[0] + xExtent[1]) / 2;
   var centerY = (yExtent[0] + yExtent[1]) / 2;
@@ -52,7 +52,7 @@ function visualize(points, canvas, message, no3d) {
     g.fillStyle = p.color;
     var x = (p.coords[0] - centerX) * scale + width / 2;
     var y = -(p.coords[1] - centerY) * scale + height / 2;
-    var r = is3d ? zScale(p.coords[2]) : 8;
+    var r = is3d ? zScale(p.coords[2]) : 4;
     circle(g, x, y, r);
   }
 
@@ -72,7 +72,7 @@ var timescale = d3.scaleLinear()
 .range([200, 120, 70, 10, 0])
 
 // Show an animated t-SNE algorithm.
-function showTsne(points, canvas, message, perplexity, epsilon) {
+function showTsne(points, canvas, message, perplexity, epsilon, stepLimit) {
   var options = {
     perplexity: perplexity, // default: 30
     dim: 2,
@@ -97,7 +97,7 @@ function showTsne(points, canvas, message, perplexity, epsilon) {
       visualize(solution, canvas, ""); //removed message
       document.getElementById('step').innerHTML = '' + step;
     }
-    if(step >= 5000) return;
+    if(stepLimit && step >= stepLimit) return;
     if (thread == currentThread) {
       var timeout = timescale(step)
       //console.log(timeout)
@@ -109,10 +109,15 @@ function showTsne(points, canvas, message, perplexity, epsilon) {
   improve();
 }
 
+function renderDemoInitial(demo, canvas) {
+  var params = [demo.options[0].start]
+  if(demo.options[1]) params.push(demo.options[1].start)
+  var points = demo.generator.apply(null, params);
+  visualize(points, canvas, null, null)
+}
 
 // Main entry point.
 function main() {
-
   // Set state from hash.
   var params = {};
   window.location.hash.substring(1).split('&').forEach(function(p) {
@@ -157,6 +162,7 @@ function main() {
   var dataMenus = d3.select("#data-menu").selectAll("div.demo-data").data(demos)
     .enter().append("div").classed("demo-data", true)
     .on("click", function(d,i) {
+      console.log("demo", d)
       showDemo(i)
     })
   dataMenus
@@ -165,8 +171,8 @@ function main() {
   dataMenus.append("br")
 
   dataMenus.append("canvas")
-  .attr("width", 300)
-  .attr("height", 300)
+  .attr("width", 150)
+  .attr("height", 150)
   .style("width", '75px')
   .style("height", '75px')
   .each(function(d,i) {
@@ -176,7 +182,6 @@ function main() {
     var points = demo.generator.apply(null, params);
     var canvas = d3.select(this).node()
     visualize(points, canvas, null, null)
-
   })
 
 

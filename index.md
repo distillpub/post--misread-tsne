@@ -2,6 +2,42 @@
 <script src="assets/tsne.js"></script>
 <script src="assets/demo-configs.js"></script>
 <script src="assets/playground.js"></script>
+<script src="assets/figures.js"></script>
+
+<style>
+  .tsne-group {
+    width: 100%;
+  }
+  .original {
+    width: 200px;
+    float: left;
+    position: relative;
+  }
+  .runners {
+    position: relative;
+    float: left;
+  }
+  a.play {
+    color: red;
+    cursor: pointer;
+  }
+
+  .runner {
+    width: 200px;
+    margin-left: 5px;
+    position: relative;
+    float: left;
+  }
+  .runner .caption {
+    font-size: 12px;
+  }
+  .runner .step {
+
+  }
+  .runner .step.done {
+    font-weight: bold;
+  }
+</style>
 
 <h1>{{ typewriter.title }}</h1>
 <!--<div class="description">{{ typewriter.description }}</div>-->
@@ -33,17 +69,17 @@ That's not the end of the complications. The t-SNE algorithm doesn't always prod
 Let's start with the "hello world" of dimensionality reduction: a data set of two widely separated clusters.
 Take two unit Gaussians in the plane, as shown in the lefthand diagram. For clarity, the two clusters are color coded. The diagrams at right show t-SNE plots for five values of perplexity.
 
-<!--
-FIGURES 1
---->
+<section class="w-page" id="figures-01">
+  {{> assets/figures_01.html }}
+</section>
 
 With perplexity values in the range (5 - 50) suggested by van der Maaten & Hinton, the diagrams do show these clusters. You can also see that outside that range, things get a little weird. With perplexity 2, local variations dominate; at perplexity 100, the clusters merge into one blob.
 
 Each of the plots above was made with 5,000 iterations with a learning rate (epsilon) of 10, and had reached a point of stability by step 5,000. How much of a difference do those values make? In our experience, the most important thing is to iterate until reaching a stable configuration.
 
-<!--
-FIGURES 2
--->
+<section class="w-page" id="figures-02">
+  {{> assets/figures_02.html }}
+</section>
 
 The images above show five different runs at perplexity 30, the first four of which were stopped before stability. After 10, 20, 60, and 120 steps you can see layouts with seeming 1-dimensional and even pointlike images of the clusters. In general, if you see a t-SNE plot with strange "pinched" shapes, it's likely whoever made the image stopped too early.
 
