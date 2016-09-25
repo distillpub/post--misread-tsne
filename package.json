@@ -2,8 +2,8 @@
   "main": "index.md",
   "name": "misread-tsne",
   "typewriter": {
-    "title": "How not to misread t-SNE plots",
-    "description": "",
+    "title": "How Not To Misread t-SNE Plots",
+    "description": "Although impressive, t-SNE plots are extremely tempting to misread. Here are some common misinterpretations.",
     "url": "http://distill.pub/2016/misread-tsne/",
     "github": "https://github.com/distillpub/post--augmented-rnns",
     "firstPublished": "Thu Sep 08 2016 10:27:05 GMT-0700 (PDT)",

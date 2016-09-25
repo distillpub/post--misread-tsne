@@ -1,61 +1,97 @@
 <style>
-
-  #data-menu {
-    float: left;
-    max-width: 370px;
+  #playground {
+    overflow: hidden;
+    font-family: 'Open Sans', sans-serif;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 24px 0;
   }
+  #playground * {
+    box-sizing: border-box;
+  }
+
+  /* Data Menu */
+  #data-menu {
+    /*float: left;*/
+    /*width: 25%*/
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  #data-menu .demo-data {
+    font-size: 10px;
+    line-height: 1.2em;
+    box-sizing: border-box;
+    float: left;
+    margin: 0 12px 12px 0;
+    padding: 10px;
+    width: calc(16.5% - 12px);
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  #data-menu .demo-data span {
+    display: none;
+  }
+  #data-menu .demo-data canvas {
+    width: 100%;
+  }
+
+  /* Playground Canvas */
   #playground-canvas {
     float: left;
-    width: 300px;
-    height: 300px;
+    width: 55%;
+    font-size: 12px;
   }
-  canvas#output {
-    border: 1px solid #ccc;
-    width: 300px;
-    height: 300px;
+  #playground-canvas canvas {
+    width: 100%;
   }
+
+  /* Options */
   #options {
     float: left;
-    width: 200px;
-    margin-left: 20px;
+    padding-left: 36px;
+    font-size: 13px;
+    line-height: 1.5em;
+    width: 45%;
+  }
+  #options #data-description {
+    width: 50%;
+    float: right;
+  }
+  #options input {
+    display: block;
+    width: 100%;
+  }
+  #options #play-controls {
+    width: 50%;
+    padding-right: 24px;
+    margin-bottom: 24px;
+  }
+  #options #data-options {
+    width: 50%;
+    padding-right: 24px;
+  }
+  #options #tsne-options {
+    width: 50%;
+    padding-right: 24px;
   }
 
-  .demo-data {
-    float: left;
-    margin: 5px;
-    padding: 5px;
-    width: 100px;
-    height: 100px;
-  }
-  .demo-data span {
-    font-size: 10px;
-    line-height: 15px;
-
-  }
 </style>
-<body onload="main()">
+<div id="playground">
 
-<div id="data-menu">
-</div>
-
-<div id="playground-canvas">
-  <canvas id="output" width=600 height=600></canvas>
-  <div id="data-description">
+  <div id="playground-canvas">
+    <canvas id="output" width=600 height=600></canvas>
   </div>
-</div>
 
-<div id="options">
-  <div id="data-options">
+  <div id="options">
+    <div id="data-menu"></div>
+    <div id="data-description"></div>
+    <div id="play-controls"><button id="play-pause">Play</button><button id="restart">Restart</button> Step: <span id="step"></span></div>
+    <div id="data-options"></div>
+    <div id="tsne-options"></div>
   </div>
-  <div id="tsne-options">
-  </div>
+
+
 </div>
-
-<button id="play-pause">Play</button>
-<button id="restart">Restart</button>
-<p>
-  Step: <span id="step"></span>
-</p>
-
-</body>
-</html>
+<script src="assets/playground.js"></script>

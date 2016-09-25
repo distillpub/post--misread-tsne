@@ -1,7 +1,6 @@
 <script src="assets/d3.min.js"></script>
 <script src="assets/tsne.js"></script>
 <script src="assets/demo-configs.js"></script>
-<script src="assets/playground.js"></script>
 <script src="assets/figures.js"></script>
 
 <style>
@@ -39,17 +38,23 @@
   }
 </style>
 
-<h1>{{ typewriter.title }}</h1>
-<!--<div class="description">{{ typewriter.description }}</div>-->
-{{> byline.html}}
+<h1 class="w-page">{{ typewriter.title }}</h1>
+<h2 class="w-page">{{ typewriter.description }}</h2>
 
+<!--
 <figure class="p-right-margin external">
   <a href="assets/mnist.png" target="blank">
     <img src="assets/mnist.png"></img>
   </a>
   <figcaption style="bottom: 0px;">A t-SNE embedding of MNIST digits, from van der Maaten & Hinton.</figcaption>
-</figure>
+</figure> -->
 
+
+<div class="w-page">
+  {{> assets/playground.html}}
+</div>
+
+{{> byline.html}}
 
 A popular method for exploring high-dimensional data is something called t-SNE, introduced by [van der Maaten and Hinton in 2008](https://lvdmaaten.github.io/publications/papers/JMLR_2008.pdf). The technique creates beautiful pictures, like the one at right showing the space of handwritten digits.
 Although impressive, these images can be tempting to misread. The purpose of this note is to prevent some common misreadings.
@@ -182,7 +187,3 @@ Five runs at perplexity 50, however, give results that (up to symmetry) are visu
 
 There's a reason that t-SNE has become so popular: it's incredibly flexible, and can often able to find structure where other dimensionality-reduction algorithms cannot. Unfortunately, that very flexibility makes it tricky to interpret t-SNE results. Out of sight from the user, the algorithm makes all sorts of adjustments that tidy up its visualizations.
 Don't let the hidden "magic" scare you away from the whole technique, though. The good news is that by studying how t-SNE behaves in simple cases, it's possible to develop an intuition for what's going on.
-
-<figure class="w-page"  id="playground">
-{{> assets/playground.html}}
-</figure>

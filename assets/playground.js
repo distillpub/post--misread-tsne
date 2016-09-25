@@ -7,6 +7,7 @@
  * for the small cases we're considering.
  */
 
+main();
 
 // Helper function to draw a circle.
 function circle(g, x, y, r) {
@@ -22,7 +23,7 @@ function visualize(points, canvas, message, no3d) {
   var width = canvas.width;
   var height = canvas.height;
   var g = canvas.getContext('2d');
-  g.fillStyle = '#fff';
+  g.fillStyle = '#fcfcfc';
   g.fillRect(0, 0, width, height);
   var xExtent = d3.extent(points, function(p) {return p.coords[0]});
   var yExtent = d3.extent(points, function(p) {return p.coords[1]});
@@ -68,8 +69,8 @@ var currentThread = 0;
 var running = true;
 
 var timescale = d3.scaleLinear()
-.domain([0, 20, 100, 200, 500, 6000])
-.range([200, 120, 70, 10, 0])
+    .domain([0, 20, 100, 200, 500, 6000])
+    .range([200, 120, 70, 10, 0]);
 
 // Show an animated t-SNE algorithm.
 function showTsne(points, canvas, message, perplexity, epsilon, stepLimit) {
@@ -157,32 +158,30 @@ function main() {
   }
 
   // Create menu of possible demos.
-  var menuDiv = document.getElementById('data-menu');
+  var menuDiv = d3.select("#data-menu");
 
-  var dataMenus = d3.select("#data-menu").selectAll("div.demo-data").data(demos)
-    .enter().append("div").classed("demo-data", true)
-    .on("click", function(d,i) {
-      console.log("demo", d)
-      showDemo(i)
-    })
-  dataMenus
-    .append("span")
-    .text(function(d) { return d.name})
-  dataMenus.append("br")
+  var dataMenus = menuDiv.selectAll(".demo-data")
+      .data(demos)
+    .enter().append("div")
+      .classed("demo-data", true)
+      .on("click", function(d,i) {
+        showDemo(i);
+      });
 
   dataMenus.append("canvas")
-  .attr("width", 150)
-  .attr("height", 150)
-  .style("width", '75px')
-  .style("height", '75px')
-  .each(function(d,i) {
-    var demo = demos[i];
-    var params = [demo.options[0].start]
-    if(demo.options[1]) params.push(demo.options[1].start)
-    var points = demo.generator.apply(null, params);
-    var canvas = d3.select(this).node()
-    visualize(points, canvas, null, null)
-  })
+      .attr("width", 150)
+      .attr("height", 150)
+      .each(function(d,i) {
+        var demo = demos[i];
+        var params = [demo.options[0].start]
+        if(demo.options[1]) params.push(demo.options[1].start)
+        var points = demo.generator.apply(null, params);
+        var canvas = d3.select(this).node()
+        visualize(points, canvas, null, null)
+      });
+
+  dataMenus.append("span")
+      .text(function(d) { return d.name});
 
 
 
