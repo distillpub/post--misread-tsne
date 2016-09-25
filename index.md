@@ -6,24 +6,20 @@
 <style>
   .tsne-group {
     width: 100%;
+    overflow: hidden;
   }
   .original {
-    width: 200px;
+    width: calc(100% / 6);
     float: left;
     position: relative;
   }
   .runners {
+    width: calc(5 * 100% / 6);
     position: relative;
     float: left;
   }
-  a.play {
-    color: red;
-    cursor: pointer;
-  }
-
   .runner {
-    width: 200px;
-    margin-left: 5px;
+    width: 20%;
     position: relative;
     float: left;
   }
@@ -74,9 +70,9 @@ That's not the end of the complications. The t-SNE algorithm doesn't always prod
 Let's start with the "hello world" of dimensionality reduction: a data set of two widely separated clusters.
 Take two unit Gaussians in the plane, as shown in the lefthand diagram. For clarity, the two clusters are color coded. The diagrams at right show t-SNE plots for five values of perplexity.
 
-<section class="w-page" id="figures-01">
+<div class="w-page tsne-group" id="figures-01">
   {{> assets/figures_01.html }}
-</section>
+</div>
 
 With perplexity values in the range (5 - 50) suggested by van der Maaten & Hinton, the diagrams do show these clusters. You can also see that outside that range, things get a little weird. With perplexity 2, local variations dominate; at perplexity 100, the clusters merge into one blob.
 
