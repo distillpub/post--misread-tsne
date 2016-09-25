@@ -52,7 +52,7 @@
   runners.append("br")
   runners.append("span").classed("caption", true).classed("step", true).text("Step 0")
 
-  dis.select(".original a.play").on("click", function() {
+  dis.select(".original .play").on("click", function() {
     dis.select(".runners").selectAll("div.runner").each(function(d) {
       var stepper = d3.select(this).select("span.step")
       stepper

@@ -19,9 +19,11 @@
     float: left;
   }
   .runner {
+    box-sizing: border-box;
     width: 20%;
     position: relative;
     float: left;
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
   }
   .runner .caption {
     font-size: 12px;
