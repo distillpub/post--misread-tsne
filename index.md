@@ -13,8 +13,13 @@
     float: left;
     position: relative;
   }
+  h1 {
+    text-align: center;
+  }
   h2.description {
-    padding-right: 17%;
+    text-align: center;
+    font-size: 20px;
+    max-width: 700px;
   }
   .runners {
     width: calc(5 * 100% / 6);

@@ -3,7 +3,7 @@
   "name": "misread-tsne",
   "typewriter": {
     "title": "How t-SNE Can Mislead",
-    "description": "Although extremely useful for visualizing high-dimensional data, t-SNE plots can be mysterious or misleading. By exploring how it behaves in simple case, we can learn to use it more effectively.",
+    "description": "Although extremely useful for visualizing high-dimensional data, t-SNE plots can sometimes be mysterious or misleading. By exploring how it behaves in simple case, we can learn to use it more effectively.",
     "url": "http://distill.pub/2016/misread-tsne/",
     "github": "https://github.com/distillpub/post--augmented-rnns",
     "firstPublished": "Thu Sep 08 2016 10:27:05 GMT-0700 (PDT)",
