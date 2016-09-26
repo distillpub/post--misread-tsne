@@ -13,6 +13,9 @@
     float: left;
     position: relative;
   }
+  h2.description {
+    padding-right: 17%;
+  }
   .runners {
     width: calc(5 * 100% / 6);
     position: relative;
@@ -37,7 +40,7 @@
 </style>
 
 <h1 class="w-page">{{ typewriter.title }}</h1>
-<h2 class="w-page">{{ typewriter.description }}</h2>
+<h2 class="description w-page">{{ typewriter.description }}</h2>
 
 <!--
 <figure class="p-right-margin external">
@@ -183,5 +186,5 @@ Five runs at perplexity 50, however, give results that (up to symmetry) are visu
 
 ## Conclusion
 
-There's a reason that t-SNE has become so popular: it's incredibly flexible, and can often able to find structure where other dimensionality-reduction algorithms cannot. Unfortunately, that very flexibility makes it tricky to interpret t-SNE results. Out of sight from the user, the algorithm makes all sorts of adjustments that tidy up its visualizations.
+There's a reason that t-SNE has become so popular: it's incredibly flexible, and can often find structure where other dimensionality-reduction algorithms cannot. Unfortunately, that very flexibility makes it tricky to interpret. Out of sight from the user, the algorithm makes all sorts of adjustments that tidy up its visualizations.
 Don't let the hidden "magic" scare you away from the whole technique, though. The good news is that by studying how t-SNE behaves in simple cases, it's possible to develop an intuition for what's going on.
