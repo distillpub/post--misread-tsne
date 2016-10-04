@@ -36,50 +36,43 @@ var demoTimescale = d3.scaleLinear()
   .domain([0, 200, 6000])
   .range([20, 10, 0])
 */
+var timescale = d3.scaleLinear()
+  .domain([0, 20, 50, 100, 200, 6000])
+  .range([60, 30, 20, 10, 0]);
 
+var currentThread = 0;
 // Show an animated t-SNE algorithm.
-function runDemo(points, canvas, options, stepLimit, stepCb, doneCb) {
-  /*
-  var options = {
-    perplexity: perplexity, // default: 30
-    dim: 2,
-    epsilon: epsilon     // default: 10
-  };
-  */
-
+function runDemo(points, canvas, options, stepCb) {
   var tsne = new tsnejs.tSNE(options);
   var dists = distanceMatrix(points);
   tsne.initDataDist(dists);
   var step = 0;
-  var chunk = 10;
-  //var thread = ++currentThread;
-  var runner = { running: true }
+  var chunk = 1;
+  var thread = ++currentThread;
+  //console.log(thread, GLOBALS.running, step)
   function improve() {
-    //console.log("improve", perplexity, step)
-    for(var k = 0; k < chunk; k++) {
-      tsne.step();
-      ++step;
+    if (thread != currentThread) return;
+    if(GLOBALS.running) {
+      if(step > 200) chunk = 10;
+      for(var k = 0; k < chunk; k++) {
+        tsne.step();
+        ++step;
+      }
+      //inform the caller about the current step
+      stepCb(step)
+
+      var solution = tsne.getSolution().map(function(coords, i) {
+        return new Point(coords, points[i].color);
+      });
+      visualize(solution, canvas, ""); //removed message
     }
-    stepCb(step)
-    var solution = tsne.getSolution().map(function(coords, i) {
-      return new Point(coords, points[i].color);
-    });
-
-    visualize(solution, canvas, ""); //removed message
-
-    //document.getElementById('step').innerHTML = '' + step;
-    if(!runner.running) return false;
-    if(stepLimit && step >= stepLimit) return doneCb();
-    //if (thread == currentThread) {
     var timeout = timescale(step)
-    //console.log(timeout)
     setTimeout(function() {
       window.requestAnimationFrame(improve);
     }, timeout)
-    //}
   }
   improve();
-  return runner;
+  //return runner;
 }
 
 

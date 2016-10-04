@@ -7,61 +7,21 @@
  * for the small cases we're considering.
  */
 
-main();
 
 // Global variable for whether we should keep optimizing.
 var currentThread = 0;
-var running = true;
+var GLOBALS = {
+  running: true,
+  unpausedBefore: false,
+  stepLimit: 5000,
+  state: {},
+  showDemo: null,
+  perplexitySlider: null,
+  epsilonSlider: null,
 
-var timescale = d3.scaleLinear()
-    .domain([0, 20, 100, 200, 500, 6000])
-    .range([200, 120, 70, 10, 0]);
-
-// Show an animated t-SNE algorithm.
-function showTsne(points, canvas, message, perplexity, epsilon, stepLimit) {
-  var options = {
-    perplexity: perplexity, // default: 30
-    dim: 2,
-    epsilon: epsilon     // default: 10
-  };
-
-  var tsne = new tsnejs.tSNE(options);
-  var dists = distanceMatrix(points);
-  tsne.initDataDist(dists);
-  var step = 0;
-  var chunk = 10;
-  var thread = ++currentThread;
-  function improve() {
-    if (running) {
-      for(var k = 0; k < chunk; k++) {
-        tsne.step();
-        ++step;
-      }
-      var solution = tsne.getSolution().map(function(coords, i) {
-        return new Point(coords, points[i].color);
-      });
-      visualize(solution, canvas, ""); //removed message
-      document.getElementById('step').innerHTML = '' + step;
-    }
-    if(stepLimit && step >= stepLimit) return;
-    if (thread == currentThread) {
-      var timeout = timescale(step)
-      //console.log(timeout)
-      setTimeout(function() {
-        window.requestAnimationFrame(improve);
-      }, timeout)
-    }
-  }
-  improve();
 }
 
-function renderDemoInitial(demo, canvas) {
-  var params = [demo.options[0].start]
-  if(demo.options[1]) params.push(demo.options[1].start)
-  var points = demo.generator.apply(null, params);
-  visualize(points, canvas, null, null)
-}
-
+main();
 // Main entry point.
 function main() {
   // Set state from hash.
@@ -73,21 +33,40 @@ function main() {
   function getParam(key, fallback) {
     return params[key] === undefined ? fallback : params[key];
   }
-  var state = {
+  GLOBALS.state = {
     perplexity: +getParam('perplexity', 30),
     epsilon: +getParam('epsilon', 10),
     demo: +getParam('demo', 0),
-    demoParams: getParam('demoParams', '').split(',').map(Number)
+    demoParams: getParam('demoParams', '50,2').split(',').map(Number)
   };
 
   // Utility function for creating value sliders.
   function makeSlider(container, name, min, max, start) {
+    /*
     var label = document.createElement('text');
     label.innerText = name + ' ';
     container.appendChild(label);
-    var currentValueLabel = document.createElement('text');
-    currentValueLabel.innerText = start;
-    container.appendChild(currentValueLabel);
+    */
+
+    var dis = d3.select(container)
+    dis.append("span").classed("slider-label-" + name, true)
+      .text(name + ' ')
+    var value = dis.append("span").classed("slider-value-" + name, true)
+      .text(start)
+
+    //var currentValueLabel = document.createElement('text');
+    //currentValueLabel.innerText = start;
+    //container.appendChild(currentValueLabel);
+    var slider = dis.append("input")
+      .attr("type", "range")
+      .attr("min", min)
+      .attr("max", max)
+      .attr("value", start)
+      .on("change", updateParameters)
+      .on("input", function() {
+        value.text(slider.node().value);
+      })
+      /*
     var slider = document.createElement('input');
     slider.type = 'range';
     slider.min = min;
@@ -95,11 +74,12 @@ function main() {
     slider.value = start;
     slider.onchange = updateParameters;
     slider.oninput = function() {
-      currentValueLabel.innerText = slider.value;
+      value.text(slider.value);
     }
     container.appendChild(slider);
     container.appendChild(document.createElement('br'));
-    return slider;
+    */
+    return slider.node();
   }
 
   // Create menu of possible demos.
@@ -114,37 +94,38 @@ function main() {
       });
 
   dataMenus.append("canvas")
-      .attr("width", 150)
-      .attr("height", 150)
-      .each(function(d,i) {
-        var demo = demos[i];
-        var params = [demo.options[0].start]
-        if(demo.options[1]) params.push(demo.options[1].start)
-        var points = demo.generator.apply(null, params);
-        var canvas = d3.select(this).node()
-        visualize(points, canvas, null, null)
-      });
+    .attr("width", 150)
+    .attr("height", 150)
+    .each(function(d,i) {
+      var demo = demos[i];
+      var params = [demo.options[0].start]
+      if(demo.options[1]) params.push(demo.options[1].start)
+      var points = demo.generator.apply(null, params);
+      var canvas = d3.select(this).node()
+      visualize(points, canvas, null, null)
+    });
 
   dataMenus.append("span")
-      .text(function(d) { return d.name});
-
-
-
+    .text(function(d) { return d.name});
 
   // Set up t-SNE UI.
   var tsneUI = document.getElementById('tsne-options');
   var perplexitySlider = makeSlider(tsneUI, 'Perplexity', 2, 100,
-      state.perplexity);
+      GLOBALS.state.perplexity);
   var epsilonSlider = makeSlider(tsneUI, 'Epsilon', 1, 20,
-      state.epsilon);
+      GLOBALS.state.epsilon);
+
+  GLOBALS.perplexitySlider = perplexitySlider
+  GLOBALS.epsilonSlider = epsilonSlider
 
   // Controls for data options.
   var optionControls;
   var demo;
+
   function updateParameters() {
-    state.demoParams = optionControls.map(function(s) {return s.value;});
-    state.perplexity = perplexitySlider.value;
-    state.epsilon = epsilonSlider.value;
+    GLOBALS.state.demoParams = optionControls.map(function(s) {return s.value;});
+    GLOBALS.state.perplexity = perplexitySlider.value;
+    GLOBALS.state.epsilon = epsilonSlider.value;
     // Set window location hash.
     function stringify(map) {
       var s = '';
@@ -153,49 +134,78 @@ function main() {
       }
       return s.substring(1);
     }
-    window.location.hash = stringify(state);
-    updateDisplayForState();
+    window.location.hash = stringify(GLOBALS.state);
+    runState();
   }
 
-  function updateDisplayForState() {
+  function runState() {
     // Set up t-SNE and start it running.
-    var points = demo.generator.apply(null, state.demoParams);
+    var points = demo.generator.apply(null, GLOBALS.state.demoParams);
     var canvas = document.getElementById('output');
-    showTsne(points, canvas, demo.name, state.perplexity, state.epsilon);
+
+    GLOBALS.unpausedBefore = false;
     setRunning(true);
+
+    runDemo(points, canvas, GLOBALS.state, function(step) {
+      d3.select("#step").text(step);
+      if(step > GLOBALS.stepLimit && !GLOBALS.unpausedBefore) {
+        setRunning(false)
+      }
+    })
   }
 
   var playPause = document.getElementById('play-pause');
   function setRunning(r) {
-    running = r;
-    playPause.innerText = running ? 'Pause' : 'Play';
+    GLOBALS.running = r;
+    playPause.innerText = GLOBALS.running ? 'Pause' : 'Play';
   }
 
   // Hook up play / pause / restart buttons.
   playPause.onclick = function() {
-    setRunning(!running);
+    GLOBALS.unpausedBefore = true;
+    setRunning(!GLOBALS.running);
   };
+
   document.getElementById('restart').onclick = updateParameters;
-
-
   // Show a given demo.
+  GLOBALS.showDemo = showDemo
   function showDemo(index, initializeFromState) {
-    state.demo = index;
+    GLOBALS.state.demo = index;
     demo = demos[index];
-
     // Show description of demo data.
     document.getElementById('data-description').innerHTML = demo.description;
-
     // Create UI for the demo data options.
     var dataOptionsArea = document.getElementById('data-options');
     dataOptionsArea.innerHTML = '';
     optionControls = demo.options.map(function(option, i) {
-      var value = initializeFromState ? state.demoParams[i] : option.start;
+      var value = initializeFromState ? GLOBALS.state.demoParams[i] : option.start;
       return makeSlider(dataOptionsArea, option.name,
           option.min, option.max, value);
     });
-    updateParameters();
 
+    menuDiv.selectAll(".demo-data")
+      .classed("selected", false)
+      .filter(function(d,i) { return i === index })
+      .classed("selected", true)
+    updateParameters();
   }
-  showDemo(state.demo, true);
+
+  //console.log("STATE", GLOBALS.state)
+  setTimeout(function() {
+    showDemo(GLOBALS.state.demo, true);
+  },1)
+}
+
+function updateStateFromFigure(figure, example) {
+  var demo = demosByName[figure.dataset];
+  //console.log("demo", demo, example)
+  GLOBALS.state.demo = demo.index
+  GLOBALS.state.demoParams = figure.params
+  GLOBALS.state.perplexity = example.perplexity
+  GLOBALS.state.epsilon = example.epsilon
+  GLOBALS.perplexitySlider.value = example.perplexity
+  GLOBALS.epsilonSlider.value = example.epsilon
+  d3.select(".slider-value-Perplexity").text(example.perplexity);
+  d3.select(".slider-value-Epsilon").text(example.epsilon);
+  GLOBALS.showDemo(demo.index, true)
 }

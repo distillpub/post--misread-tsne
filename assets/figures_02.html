@@ -23,6 +23,7 @@
   var runners = dis.select(".runners").selectAll("div.runner").data(figure.examples)
     .enter().append("div").classed("runner", true)
 
+
   runners.append("span").classed("caption", true)
   .text(function(d) { return "Perplexity = " + d.perplexity})
 

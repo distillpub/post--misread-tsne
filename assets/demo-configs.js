@@ -516,7 +516,7 @@ var demos = [
     options: [
       {
         name: 'Number Of Points',
-        min: 1, max: 400, start: 50,
+        min: 1, max: 500, start: 50,
       },
       {
         name: 'Dimensions',
@@ -532,7 +532,7 @@ var demos = [
     options: [
       {
         name: 'Number Of Points',
-        min: 1, max: 400, start: 50,
+        min: 1, max: 500, start: 50,
       },
       {
         name: 'Dimensions',
@@ -657,6 +657,7 @@ var demos = [
 
 var demosByName = {}
 demos.forEach(function(d,i) {
+  d.index = i;
   demosByName[d.name] = d;
 })
 
