@@ -2,8 +2,7 @@
 
 <div class="original">
   <span class="caption">Original</span>
-  <canvas class="tsne-plot"></canvas>
-  <button class="play">Play</button>
+  <img class="tsne-plot"></img>
 </div>
 <div class="runners">
 </div>
@@ -11,18 +10,12 @@
 
 <script>
 (function() {
-  var dis = d3.select("#figures-01")
-  var dataset = "Two Clusters"
-  var demo = demosByName[dataset];
-  var params = [50, 2]
-  var examples = [
-    { perplexity: 2, epsilon: 10, dim: 2 },
-    { perplexity: 5, epsilon: 10, dim: 2 },
-    { perplexity: 30, epsilon: 10, dim: 2 },
-    { perplexity: 50, epsilon: 10, dim: 2 },
-    { perplexity: 100, epsilon: 10, dim: 2 },
-  ]
+  var FIGURE = "01"
+  var figure = figures[0];
+
+  var dis = d3.select("#figures-" + FIGURE)
   // original
+  /*
   var originalCanvas = dis.select(".original .tsne-plot")
     .style("width", FIGURES.width + "px")
     .style("height", FIGURES.height + "px")
@@ -31,13 +24,26 @@
     .node();
   var originalPoints = getPoints(demo, params)
   visualize(originalPoints, originalCanvas, null, null)
+  */
+  var original = dis.select(".original .tsne-plot")
+    .style("width", FIGURES.width + "px")
+    .style("height", FIGURES.height + "px")
+    .attr("src", "assets/figure_" + FIGURE + "_" + "original.png")
 
   // examples
-  var runners = dis.select(".runners").selectAll("div.runner").data(examples)
+  var runners = dis.select(".runners").selectAll("div.runner").data(figure.examples)
     .enter().append("div").classed("runner", true)
 
   runners.append("span").classed("caption", true)
   .text(function(d) { return "Perplexity = " + d.perplexity})
+
+  runners.append("img")
+    .style("width", FIGURES.width + "px")
+    .style("height", FIGURES.height + "px")
+    .attr("src", function(d,i) {
+      return "assets/figure_" + FIGURE + "_" + d.id + ".png"
+    })
+  /*
   runners.append("canvas")
     .style("width", FIGURES.width + "px")
     .style("height", FIGURES.height + "px")
@@ -48,10 +54,12 @@
       //var points = getPoints(demo, params)
       visualize(originalPoints, canvas)
     })
+    */
 
   runners.append("br")
-  runners.append("span").classed("caption", true).classed("step", true).text("Step 0")
+  runners.append("span").classed("caption", true).classed("step", true).text(function(d) { return "Step " + d.step })
 
+  /*
   dis.select(".original .play").on("click", function() {
     dis.select(".runners").selectAll("div.runner").each(function(d) {
       var stepper = d3.select(this).select("span.step")
@@ -72,6 +80,7 @@
       d.runner = runner;
     })
   })
+  */
 
 })()
 </script>
