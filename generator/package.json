@@ -1,0 +1,16 @@
+{
+  "name": "generator",
+  "version": "1.0.0",
+  "description": "generate figures for this post",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ian Johnson",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^2.0.1",
+    "canvas": "^1.5.0",
+    "d3": "^4.2.6"
+  }
+}

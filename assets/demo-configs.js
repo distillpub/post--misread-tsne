@@ -660,4 +660,9 @@ demos.forEach(function(d,i) {
   demosByName[d.name] = d;
 })
 
-if(typeof module != "undefined") module.exports = demos;
+if(typeof module != "undefined") module.exports = {
+  demos: demos,
+  demosByName: demosByName,
+  distanceMatrix: distanceMatrix,
+  Point: Point
+};

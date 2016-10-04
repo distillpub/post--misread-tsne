@@ -1,6 +1,15 @@
 /*
 Configurations and utility functions for figures
 */
+if(typeof require != "undefined") {
+ // hack for loading from generator
+ var d3 = require('./d3.min.js')
+ var visualize = require('./visualize.js').visualize
+ var tsnejs = require('./tsne.js')
+ var demoConfigs = require('./demo-configs.js')
+ var distanceMatrix = demoConfigs.distanceMatrix
+ var Point = demoConfigs.Point
+}
 
 var FIGURES = {
   width: 150,
@@ -22,9 +31,11 @@ function renderDemoInitial(demo, params, canvas) {
 }
 
 
+/*
 var demoTimescale = d3.scaleLinear()
   .domain([0, 200, 6000])
   .range([20, 10, 0])
+*/
 
 // Show an animated t-SNE algorithm.
 function runDemo(points, canvas, options, stepLimit, stepCb, doneCb) {
@@ -72,20 +83,26 @@ function runDemo(points, canvas, options, stepLimit, stepCb, doneCb) {
 }
 
 
-function runDemoSync(points, canvas, options, stepLimit) {
+function runDemoSync(points, canvas, options, stepLimit, no3d) {
   var tsne = new tsnejs.tSNE(options);
   var dists = distanceMatrix(points);
   tsne.initDataDist(dists);
   var step = 0;
-  var chunk = 10;
-  //var thread = ++currentThread;
   for(var k = 0; k < stepLimit; k++) {
+    if(k % 100 === 0) console.log("step", step)
     tsne.step();
     ++step;
   }
   var solution = tsne.getSolution().map(function(coords, i) {
     return new Point(coords, points[i].color);
   });
-  visualize(solution, canvas, ""); //removed message
+  visualize(solution, canvas, "", no3d); //removed message
   return step;
+}
+
+if(typeof module != "undefined") module.exports = {
+  runDemo: runDemo,
+  runDemoSync: runDemoSync,
+  getPoints: getPoints,
+  FIGURES: FIGURES
 }
