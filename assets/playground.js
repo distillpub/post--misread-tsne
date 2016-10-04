@@ -208,4 +208,10 @@ function updateStateFromFigure(figure, example) {
   d3.select(".slider-value-Perplexity").text(example.perplexity);
   d3.select(".slider-value-Epsilon").text(example.epsilon);
   GLOBALS.showDemo(demo.index, true)
+  d3.select("#playground").classed("modal", true)
 }
+d3.select("body").on("keydown", function() {
+  if(d3.event.keyCode === 27) {
+    d3.select("#playground").classed("modal", false)
+  }
+})
