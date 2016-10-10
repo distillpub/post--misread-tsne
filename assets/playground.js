@@ -200,6 +200,7 @@ function main() {
   },1)
 }
 
+/*
 function updateStateFromFigure(figure, example) {
   var demo = demosByName[figure.dataset];
   //console.log("demo", demo, example)
@@ -219,3 +220,5 @@ d3.select("body").on("keydown", function() {
     d3.select("#playground").classed("modal", false)
   }
 })
+
+*/
