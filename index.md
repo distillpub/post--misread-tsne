@@ -6,6 +6,7 @@
 <script src="assets/figures.js"></script>
 
 <style>
+  {{> assets/sliders.css}}
   .tsne-group {
     width: 100%;
     overflow: hidden;

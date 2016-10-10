@@ -3,7 +3,7 @@
     overflow: hidden;
     font-family: 'Open Sans', sans-serif;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    /*border-bottom: 1px solid rgba(0, 0, 0, 0.1);*/
     padding: 24px 0;
     background: #fcfcfc;
     z-index: 1000;
@@ -17,7 +17,6 @@
     left: 10px;
     right: 10px;
     top: 50px;
-
   }
 
   /* Data Menu */
@@ -70,25 +69,55 @@
     width: 45%;
   }
   #options #data-description {
-    width: 50%;
+    width: 43%;
     float: right;
+    font-size: 16px;
+    line-height: 1.6em;
   }
   #options input {
     display: block;
     width: 100%;
+    margin: 12px 0 16px 0;
   }
   #options #play-controls {
-    width: 50%;
-    padding-right: 24px;
+    width: 45%;
     margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+  }
+  #play-controls button {
+    outline: none;
+    border-radius: 50%;
+    background: steelblue;
+    color: white;
+    width: 48px;
+    height: 48px;
+    border: none;
+    margin-right: 12px;
+  }
+  #play-controls #play-pause {
+  }
+  #play-controls #restart {
+  }
+  #play-controls #play-pause i {
+    display: none;
+    font-size: 30px;
+  }
+  #play-controls #play-pause.paused i:nth-child(1) {
+    display: block;
+  }
+  #play-controls #play-pause.playing i:nth-child(2) {
+    display: block;
+  }
+  #steps-display {
+    text-align: center;
+    width: 48px;
   }
   #options #data-options {
-    width: 50%;
-    padding-right: 24px;
+    width: 45%;
   }
   #options #tsne-options {
-    width: 50%;
-    padding-right: 24px;
+    width: 45%;
   }
 
 </style>
@@ -101,7 +130,18 @@
   <div id="options">
     <div id="data-menu"></div>
     <div id="data-description"></div>
-    <div id="play-controls"><button id="play-pause">Play</button><button id="restart">Restart</button> Step: <span id="step"></span></div>
+    <div id="play-controls">
+      <button id="play-pause">
+        <i class="material-icons">play_arrow</i>
+        <i class="material-icons">pause</i>
+      </button>
+      <button id="restart">
+        <i class="material-icons">refresh</i>
+      </button>
+      <div id="steps-display">
+        Step<br><span id="step"></span>
+      </div>
+    </div>
     <div id="data-options"></div>
     <div id="tsne-options"></div>
   </div>

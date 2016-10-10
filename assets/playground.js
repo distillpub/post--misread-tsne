@@ -157,7 +157,11 @@ function main() {
   var playPause = document.getElementById('play-pause');
   function setRunning(r) {
     GLOBALS.running = r;
-    playPause.innerText = GLOBALS.running ? 'Pause' : 'Play';
+    if (GLOBALS.running) {
+      playPause.setAttribute("class", "playing")
+    } else {
+      playPause.setAttribute("class", "paused")
+    }
   }
 
   // Hook up play / pause / restart buttons.
