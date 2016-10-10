@@ -73,7 +73,7 @@
 
 {{> byline.html}}
 
-A popular method for exploring high-dimensional data is something called t-SNE, introduced by [van der Maaten and Hinton in 2008](https://lvdmaaten.github.io/publications/papers/JMLR_2008.pdf). The technique creates beautiful pictures, like the one at right showing the space of handwritten digits.
+A popular method for exploring high-dimensional data is something called t-SNE, introduced by [van der Maaten and Hinton in 2008](https://lvdmaaten.github.io/publications/papers/JMLR_2008.pdf). The technique has become widespread in the field of machine learning, since it has an almost magical ability to create compelling two-dimensonal "maps" of data that has hundreds or even thousands of dimensions.
 Although impressive, these images can be tempting to misread. The purpose of this note is to prevent some common misreadings.
 
 We'll walk through a series of simple examples to illustrate what t-SNE diagrams can and cannot show. The t-SNE technique really is useful—but only if you know how to interpret it.
