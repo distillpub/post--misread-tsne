@@ -55,8 +55,8 @@
   }
 </style>
 
-<h1 class="w-page">{{ typewriter.title }}</h1>
-<h2 class="description w-page">{{ typewriter.description }}</h2>
+<h1 class="w-page">{{ distill.title }}</h1>
+<h2 class="description w-page">{{ distill.description }}</h2>
 
 <!--
 <figure class="p-right-margin external">
