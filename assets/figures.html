@@ -20,7 +20,7 @@
       .attr("src", "assets/figure_" + FIGURE + "_" + "original.png")
 
     // examples
-    var runners = dis.append("div").classed(".runners", true).selectAll("div.runner").data(figure.examples)
+    var runners = dis.append("div").classed("runners", true).selectAll("div.runner").data(figure.examples)
       .enter().append("div").classed("runner", true)
     if(!figure.noclick) {
       runners
