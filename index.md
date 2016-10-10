@@ -53,6 +53,10 @@
   .runner .step.done {
     font-weight: bold;
   }
+
+  section {
+    overflow: hidden;
+  }
 </style>
 
 <h1 class="w-page">{{ distill.title }}</h1>
@@ -224,7 +228,42 @@ Five runs at perplexity 50, however, give results that (up to symmetry) are visu
   {{> assets/figures_13.html }}
 </section>
 
+---
+
 ## Conclusion
 
 There's a reason that t-SNE has become so popular: it's incredibly flexible, and can often find structure where other dimensionality-reduction algorithms cannot. Unfortunately, that very flexibility makes it tricky to interpret. Out of sight from the user, the algorithm makes all sorts of adjustments that tidy up its visualizations.
 Don't let the hidden "magic" scare you away from the whole technique, though. The good news is that by studying how t-SNE behaves in simple cases, it's possible to develop an intuition for what's going on.
+
+
+
+<section class="appendix">
+
+  <h3>Acknowledgments</h3>
+  <p>We are very grateful to ...</p>
+  <p>This work was made possible by the support of the <a href="https://research.google.com/teams/brain/">Google Brain</a> team.
+
+  <h3>Author Contributions</h3>
+  <p>Who did what in the article?.</p>
+
+  <h3 id="citation">Errors, Reuse, and Citation</h3>
+  <p>If you see mistakes or want to suggest changes, please submit a pull request on <a href="{{{distill.github}}}">github</a>.
+  <p>Diagrams and text are licensed under Creative Commons Attribution <a href="https://creativecommons.org/licenses/by/2.0/">CC-BY 2.0</a>, unless noted otherwise, with the source available on available on <a href="{{{distill.github}}}">github</a>. The figures that have been reused from other sources don't fall under this license and can be recognized by a note in their caption: "Figure from …".
+  <p>For attribution in academic contexts, please cite this work as
+  <pre class="citation">{{distill.authors}} "{{distill.title}}", Distill, {{distill.firstPublishedYear}}.</pre>
+  <p>BibTeX citation
+  {{=<% %>=}}
+<pre class="citation">@misc{<%distill.slug%>,
+  author = {<%distill.bibtexAuthors%>},
+  title = {<%distill.title%>},
+  year = {<%distill.firstPublishedYear%>},
+  howpublished = {<%distill.url%>}
+}</pre>
+
+  <%={{ }}=%>
+  <h3>References</h3>
+  <ul class="references">
+    <li><a href="https://arxiv.org/pdf/1501.00092.pdf">Dong, C., Loy, C.C., He, K. and Tang, X., 2014. <b>Image super-resolution using deep convolutional networks.</b> arXiv preprint arXiv:1501.00092.</a></li>
+  </ul>
+
+</section>
