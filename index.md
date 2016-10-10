@@ -95,16 +95,14 @@ That's not the end of the complications. The t-SNE algorithm doesn't always prod
 Let's start with the "hello world" of dimensionality reduction: a data set of two widely separated clusters.
 Take two unit Gaussians in the plane, as shown in the lefthand diagram. For clarity, the two clusters are color coded. The diagrams at right show t-SNE plots for five values of perplexity.
 
-<section class="w-page tsne-group" id="figures-01">
-  {{> assets/figures_01.html }}
+<section class="w-page tsne-group" id="figures-01" data-id="01">
 </section>
 
 With perplexity values in the range (5 - 50) suggested by van der Maaten & Hinton, the diagrams do show these clusters. You can also see that outside that range, things get a little weird. With perplexity 2, local variations dominate; at perplexity 100, the clusters merge into one blob.
 
 Each of the plots above was made with 5,000 iterations with a learning rate (epsilon) of 10, and had reached a point of stability by step 5,000. How much of a difference do those values make? In our experience, the most important thing is to iterate until reaching a stable configuration.
 
-<section class="w-page tsne-group" id="figures-02">
-  {{> assets/figures_02.html }}
+<section class="w-page tsne-group" id="figures-02" data-id="02">
 </section>
 
 The images above show five different runs at perplexity 30, the first four of which were stopped before stability. After 10, 20, 60, and 120 steps you can see layouts with seeming 1-dimensional and even pointlike images of the clusters. In general, if you see a t-SNE plot with strange "pinched" shapes, it's likely whoever made the image stopped too early.
@@ -119,8 +117,7 @@ From now on, unless otherwise stated, we'll show results from 5,000 iterations; 
 
 So far, so good. But what if the two clusters have different standard deviations, and so different sizes? (By size we mean bounding box measurements, not number of points.) Below are t-SNE plots for a mixture of Gaussians, where one is 10 times as dispersed as the other.
 
-<section class="w-page tsne-group" id="figures-03">
-  {{> assets/figures_03.html }}
+<section class="w-page tsne-group" id="figures-03" data-id="03">
 </section>
 
 Surprisingly, the two clusters look about same size in the t-SNE plots.
@@ -134,8 +131,7 @@ It's interesting to look back at the MNIST visualization at the top of the page.
 
 What about distances _between_ clusters? The next diagrams show three Gaussians of 50 points each, one pair being 5 times as far apart as another pair.
 
-<section class="w-page tsne-group" id="figures-04">
-  {{> assets/figures_04.html }}
+<section class="w-page tsne-group" id="figures-04" data-id="04">
 </section>
 
 At perplexity 50, the diagram gives a good sense of the global geometry. For lower perplexity values the clusters look equidistant. When the perplexity is 100, we see the global geometry fine, but one of the cluster appears, falsely, much smaller than the others.
@@ -143,8 +139,7 @@ Since perplexity 50 gave us a good picture in this example, can we can always se
 
 Sadly, no. If we add more points to each cluster, the perplexity has to increase to compensate. Here are the t-SNE diagrams for three Gaussian clusters with 200 points each, instead of 50. Now none of the trial perplexity values gives a good result.
 
-<section class="w-page tsne-group" id="figures-05">
-  {{> assets/figures_05.html }}
+<section class="w-page tsne-group" id="figures-05" data-id="05">
 </section>
 
 It's bad news that seeing global geometry requires fine-tuning perplexity. Real-world data would probably have multiple clusters with different numbers of elements. There may not be one perplexity value that will capture distances across all clusters—and sadly perplexity is a global parameter. Fixing this problem might be an interesting area for future research.
@@ -157,8 +152,7 @@ The basic message is that distances between well-separated clusters in a t-SNE p
 Knowing random data when you see it is a critical skill, but it takes time to build up the right intuitions. A tricky thing about t-SNE is that it throws a lot of existing intuition out the window.
 The next diagrams show genuinely random data, 500 points drawn from a unit Gaussian distribution in 100 dimensions. The left image is a projection onto the first two coordinates.
 
-<section class="w-page tsne-group" id="figures-06">
-  {{> assets/figures_06.html }}
+<section class="w-page tsne-group" id="figures-06" data-id="06">
 </section>
 
 The plot with perplexity 2 seems to show some dramatic clusters. If you were tuning perplexity to bring out structure in the data, you might think you'd hit the jackpot.
@@ -172,8 +166,7 @@ There's something else interesting, though, which may be a win for t-SNE. At fir
 
 It's rare for data to be distributed in a perfectly uniform way. Let's take a look at an axis-aligned Gaussian distribution in 50 dimensions, where the standard deviation in coordinate i is 1/i. That is, we're looking at a long-ish ellipsoidal cloud of points.
 
-<section class="w-page tsne-group" id="figures-07">
-  {{> assets/figures_07.html }}
+<section class="w-page tsne-group" id="figures-07" data-id="07">
 </section>
 
 You can see that for high enough perplexity values, the shapes comes through quite nicely. For low ones, we see local effects—and clumping—take center stage. But after seeing enough of these diagrams, you can start to recognize that's what's happening.
@@ -181,8 +174,7 @@ In the MNIST digits visualization shown at the beginning of this article, the cl
 
 More extreme shapes also come through, but again only at the right perplexity. Here are two clusters of 50 points each in 2D, arranged in parallel lines with a bit of noise.
 
-<section class="w-page tsne-group" id="figures-08">
-  {{> assets/figures_08.html }}
+<section class="w-page tsne-group" id="figures-08" data-id="08">
 </section>
 
 For a certain range of perplexity the long clusters look close to correct, which is reassuring.
@@ -196,8 +188,7 @@ Even in the best cases, though, there's a subtle distortion: the lines are sligh
 Sometimes you can read topological information off a t-SNE plot, but it typically requires views at multiple perplexities.
 One of the simplest topological properties is containment. The plots below show two groups of 50 points in 50 dimensional space. Both are sampled from symmetric Gaussian distributions centered at the origin, but one is 50 times more tightly dispersed than the other. The "small" distribution is in effect contained in the large one.
 
-<section class="w-page tsne-group" id="figures-09">
-  {{> assets/figures_09.html }}
+<section class="w-page tsne-group" id="figures-09" data-id="09">
 </section>
 
 The perplexity 30 view shows the basic topology correctly, but again t-SNE greatly exaggerates the size of the smaller group of points. At perplexity 50, there's a new phenomenon: the outer group becomes a circle, as the plot tries to depict the fact that all its are about the same distance from the inner group. If you looked at this image alone, it would be easy to misread these outer points as a one-dimensional structure.
@@ -206,11 +197,9 @@ What about more complicated types of topology? This may be a subject dearer to m
 
 Consider points that trace a link or a knot in three dimensions. Once again, looking at multiple perplexity values gives the most complete picture. Low perplexity values give two completely separate loops; high ones show a kind of global connectivity.
 
-<section class="w-page tsne-group" id="figures-10">
-  {{> assets/figures_10.html }}
+<section class="w-page tsne-group" id="figures-10" data-id="10">
 </section>
-<section class="w-page tsne-group" id="figures-11">
-  {{> assets/figures_11.html }}
+<section class="w-page tsne-group" id="figures-11" data-id="11">
 </section>
 
 
@@ -218,14 +207,12 @@ The trefoil knot is an interesting example of how multiple runs affect the outco
 
 The algorithm settles on a circle twice. But in three of the runs it ends up with an arguably suboptimal solution, and these three configurations are quite different. (Using the dot color as a guide, you can see that the first and third runs are far from each other.)
 
-<section class="w-page tsne-group" id="figures-12">
-  {{> assets/figures_12.html }}
+<section class="w-page tsne-group" id="figures-12" data-id="12">
 </section>
 
 Five runs at perplexity 50, however, give results that (up to symmetry) are visually identical. Evidently some problems are easier than others to optimize.
 
-<section class="w-page tsne-group" id="figures-13">
-  {{> assets/figures_13.html }}
+<section class="w-page tsne-group" id="figures-13" data-id="13">
 </section>
 
 ---
@@ -236,6 +223,8 @@ There's a reason that t-SNE has become so popular: it's incredibly flexible, and
 Don't let the hidden "magic" scare you away from the whole technique, though. The good news is that by studying how t-SNE behaves in simple cases, it's possible to develop an intuition for what's going on.
 
 
+<!-- bring the figures to life -->
+{{> assets/figures.html}}
 
 <section class="appendix">
 

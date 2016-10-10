@@ -1,0 +1,48 @@
+
+
+<script>
+(function() {
+  d3.selectAll("section.tsne-group").data(figures, function(d) {
+    if(!d) return this.dataset.id;
+    return d.id
+  })
+  .each(generateFigure)
+
+  function generateFigure(figure) {
+
+    var FIGURE = figure.id
+    var dis = d3.select(this)
+    console.log("FIGURE", figure, this)
+    var original = dis.append("div").classed("original", true)
+    original.append("span").classed("caption", true).text("Original")
+    original.append("img").classed("tsne-plot", true)
+      .style("width", FIGURES.width + "px")
+      .style("height", FIGURES.height + "px")
+      .attr("src", "assets/figure_" + FIGURE + "_" + "original.png")
+
+    // examples
+    var runners = dis.append("div").classed(".runners", true).selectAll("div.runner").data(figure.examples)
+      .enter().append("div").classed("runner", true)
+    if(!figure.noclick) {
+      runners
+        .classed("clickable", true)
+        .on("click", function(d) {
+          updateStateFromFigure(figure, d)
+        })
+    }
+
+    runners.append("span").classed("caption", true)
+    .text(function(d) { return "Perplexity = " + d.perplexity})
+
+    runners.append("img")
+      .style("width", FIGURES.width + "px")
+      .style("height", FIGURES.height + "px")
+      .attr("src", function(d,i) {
+        return "assets/figure_" + FIGURE + "_" + d.id + ".png"
+      })
+
+    runners.append("br")
+    runners.append("span").classed("caption", true).classed("step", true).text(function(d) { return "Step " + d.step })
+  }
+})()
+</script>
