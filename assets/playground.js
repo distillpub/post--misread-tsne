@@ -25,6 +25,7 @@ main();
 // Main entry point.
 function main() {
   // Set state from hash.
+  var format = d3.format(",");
   var params = {};
   window.location.hash.substring(1).split('&').forEach(function(p) {
     var tokens = p.split('=');
@@ -147,7 +148,7 @@ function main() {
     setRunning(true);
 
     runDemo(points, canvas, GLOBALS.state, function(step) {
-      d3.select("#step").text(step);
+      d3.select("#step").text(format(step));
       if(step > GLOBALS.stepLimit && !GLOBALS.unpausedBefore) {
         setRunning(false)
       }

@@ -21,8 +21,11 @@
   }
   h2.description {
     text-align: center;
-    font-size: 20px;
-    max-width: 700px;
+    font-size: 21px;
+    max-width: 740px;
+    font-weight: 300;
+    margin-bottom: 36px;
+    line-height: 1.5em;
   }
   .runners {
     width: calc(5 * 100% / 6);
