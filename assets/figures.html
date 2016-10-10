@@ -12,7 +12,6 @@
 
     var FIGURE = figure.id
     var dis = d3.select(this)
-    console.log("FIGURE", figure, this)
     var original = dis.append("div").classed("original", true)
     original.append("span").classed("caption", true).text("Original")
     original.append("img").classed("tsne-plot", true)

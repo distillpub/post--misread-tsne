@@ -226,6 +226,10 @@ Don't let the hidden "magic" scare you away from the whole technique, though. Th
 <!-- bring the figures to life -->
 {{> assets/figures.html}}
 
+<div class="w-page">
+  {{> assets/tray.html}}
+</div>
+
 <section class="appendix">
 
   <h3>Acknowledgments</h3>
