@@ -42,9 +42,13 @@
     border-radius: 4px;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.08);
   }
+  #data-menu .demo-data:hover {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+
+  }
   #data-menu .demo-data.selected::after {
     content: "";
-    border: 3px solid rgba(70, 130, 180, 0.8);
+    border: 2px solid rgba(70, 130, 180, 0.8);
     width: 100%;
     height: 100%;
     position: absolute;
@@ -56,8 +60,15 @@
   #data-menu .demo-data span {
     display: none;
   }
+  #data-menu .demo-data:hover canvas {
+    opacity: 1;
+  }
   #data-menu .demo-data canvas {
     width: 100%;
+    opacity: 0.3;
+  }
+  #data-menu .demo-data.selected canvas {
+    opacity: 1;
   }
 
   /* Playground Canvas */
@@ -123,12 +134,16 @@
   #steps-display {
     text-align: center;
     width: 48px;
+    font-size: 16px;
+    line-height: 1.6em;
   }
   #options #data-options {
     width: 45%;
+    margin-left: 4px;
   }
   #options #tsne-options {
     width: 45%;
+    margin-left: 4px;
   }
 
 </style>

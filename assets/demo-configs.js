@@ -409,6 +409,17 @@ function randomJump(n, dim) {
 
 var demos = [
   {
+    name: 'Grid',
+    description: 'A square grid with equal spacing between points',
+    options: [
+      {
+        name: 'Points Per Side',
+        min: 2, max: 20, start: 10,
+      }
+    ],
+    generator: gridData
+  },
+  {
     name: 'Two Clusters',
     description: 'Two clusters with equal numbers of points.',
     options: [
@@ -614,17 +625,6 @@ var demos = [
       }
     ],
     generator: randomJump
-  },
-  {
-    name: 'Grid',
-    description: 'A square grid with equal spacing between points',
-    options: [
-      {
-        name: 'Points Per Side',
-        min: 2, max: 20, start: 10,
-      }
-    ],
-    generator: gridData
   },
   {
     name: 'Equally Spaced',

@@ -2,7 +2,7 @@
   #tray {
     border: 2px solid steelblue;
     background: white;
-    padding: 48px 24px;
+    padding: 24px 24px 60px 24px;
     box-shadow: 0px 2px 24px rgba(0, 0, 0, 0.2);
     position: fixed;
     transition: top 0.3s;
@@ -10,7 +10,7 @@
     box-sizing: border-box;
     left: 0;
     height: 340px;
-    top: -350px;
+    top: -370px;
     display: flex;
     justify-content: center;
     width: 700px;
@@ -74,18 +74,21 @@
   #tray-tsne-sliders {
   }
   #tray-close {
-    position: absolute;
-    top: 15px;
-    right: 5px;
     cursor: pointer;
     outline: none;
-    border-radius: 50%;
     background: white;
-    width: 48px;
-    height: 48px;
     border: none;
-    margin-right: 12px;
-
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 6px 0;
+    background: #f0f4f5;
+    opacity: 0.6;
+    color: steelblue;
+  }
+  #tray-close:hover {
+    opacity: 1;
   }
 </style>
 <div id="tray">
@@ -108,8 +111,8 @@
     </div>
     <div id="tray-data-sliders"></div>
     <div id="tray-tsne-sliders"></div>
-    <button id="tray-close"><i class="material-icons">clear</i></button>
   </div>
+  <button id="tray-close"><i class="material-icons">expand_less</i></button>
 </div>
 
 <script>
