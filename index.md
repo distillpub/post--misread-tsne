@@ -26,37 +26,6 @@
     font-weight: 300;
     line-height: 1.5em;
   }
-  .runners {
-    width: calc(5 * 100% / 6);
-    position: relative;
-    float: left;
-  }
-  .runner {
-    box-sizing: border-box;
-    padding-left: 10px;
-    width: 20%;
-    position: relative;
-    float: left;
-    border-left: 1px solid rgba(0, 0, 0, 0.2);
-    border-bottom: 1px solid white;
-  }
-  .runner.clickable {
-    cursor: pointer;
-  }
-  .runner.clickable:hover {
-    border-bottom: 1px solid steelblue;
-
-  }
-  .runner .caption {
-    font-size: 12px;
-  }
-  .runner .step {
-
-  }
-  .runner .step.done {
-    font-weight: bold;
-  }
-
   section {
     overflow: hidden;
   }
@@ -226,7 +195,7 @@ Don't let the hidden "magic" scare you away from the whole technique, though. Th
 
 
 <!-- bring the figures to life -->
-{{> assets/figures.html}}
+{{> assets/tsne-group.html}}
 
 <div class="w-page">
   {{> assets/tray.html}}

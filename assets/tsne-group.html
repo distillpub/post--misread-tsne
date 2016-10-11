@@ -1,0 +1,111 @@
+<style>
+.tsne-group {
+  overflow: visible;
+  display: flex;
+}
+
+/*.runners {
+  width: calc(5 * 100% / 6);
+  position: relative;
+}*/
+.tsne-group .original,
+.tsne-group .runner {
+  box-sizing: border-box;
+  flex-grow: 1;
+  width: 100%;
+  position: relative;
+}
+.tsne-group .runner {
+  margin-left: 12px;
+}
+
+.runner.clickable {
+  cursor: pointer;
+}
+.runner.clickable:hover .image {
+  border-color: steelblue;
+}
+
+.tsne-group .original h3 {
+  font-size: 15px;
+  margin-top: 0;
+}
+
+.tsne-group .image {
+  margin-top: 18px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  margin-bottom: 8px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  padding-top: 100%;
+  background: white;
+  position: relative;
+}
+
+.tsne-group .image img {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+}
+
+.runner .caption {
+  font-size: 12px;
+  line-height: 1.6em;
+  margin-top: 0px;
+}
+.runner .step {
+
+}
+.runner .step.done {
+  font-weight: bold;
+}
+</style>
+
+<script>
+(function() {
+  var format = d3.format(",");
+  d3.selectAll("section.tsne-group").data(figures, function(d) {
+    if(!d) return this.dataset.id;
+    return d.id
+  })
+  .each(generateFigure)
+
+  function generateFigure(figure) {
+
+    var FIGURE = figure.id
+    var dis = d3.select(this)
+    var original = dis.append("div").classed("original", true)
+    original.append("div")
+        .classed("image", true)
+      .append("img")
+        .classed("tsne-plot", true)
+        .attr("src", "assets/figure_" + FIGURE + "_" + "original.png");
+    original.append("h3").text("Original")
+
+    // examples
+    var runners = dis.selectAll(".runner").data(figure.examples)
+      .enter().append("div").classed("runner", true)
+    if(!figure.noclick) {
+      runners
+        .classed("clickable", true)
+        .on("click", function(d) {
+          updateStateFromFigure(figure, d)
+        });
+    }
+
+    runners.append("div")
+        .classed("image", true)
+      .append("img")
+        .attr("src", function(d,i) {
+          return "assets/figure_" + FIGURE + "_" + d.id + ".png"
+        });
+
+    runners.append("div").classed("caption", true)
+      .text(function(d) { return "Perplexity: " + format(d.perplexity); })
+
+    runners.append("div").classed("caption", true).classed("step", true).text(function(d) { return "Step: " + format(d.step); })
+  }
+})()
+</script>
