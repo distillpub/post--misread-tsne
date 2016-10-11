@@ -4,6 +4,7 @@
 <script src="assets/figure-configs.js"></script>
 <script src="assets/visualize.js"></script>
 <script src="assets/figures.js"></script>
+{{> assets/tray.html}}
 
 <style>
   {{> assets/sliders.css}}
@@ -197,9 +198,6 @@ Don't let the hidden "magic" scare you away from the whole technique, though. Th
 <!-- bring the figures to life -->
 {{> assets/tsne-group.html}}
 
-<div class="w-page">
-  {{> assets/tray.html}}
-</div>
 
 <section class="appendix">
 

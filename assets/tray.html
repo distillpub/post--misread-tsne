@@ -1,25 +1,26 @@
 <style>
   #tray {
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    border: 2px solid steelblue;
     background: white;
-    padding: 20px;
-    box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.1);
+    padding: 48px 24px;
+    box-shadow: 0px 2px 24px rgba(0, 0, 0, 0.2);
     position: fixed;
-    transition: top 0.5s;
+    transition: top 0.3s;
     width: 100%;
     box-sizing: border-box;
     left: 0;
-    height: 300px;
-    top: -320px;
+    height: 340px;
+    top: -350px;
     display: flex;
     justify-content: center;
     width: 700px;
     left: calc(50% - 350px);
     z-index: 100;
+    border-radius: 4px;
   }
 
   #tray.modal {
-    top: -1px;
+    top: -4px;
   }
 
   #tray-content {
@@ -182,7 +183,8 @@
   }
 
   /* Activate the tray */
-  function updateStateFromFigure(figure, example) {
+  function updateStateFromFigure(figure, example, el) {
+    var y = el.getBoundingClientRect().top;
     var demo = demosByName[figure.dataset];
     var state = {
       demo: demos[demo.index],
