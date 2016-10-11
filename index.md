@@ -241,9 +241,6 @@ Don't let the hidden "magic" scare you away from the whole technique, though. Th
      <a href="https://github.com/karpathy/tsnejs">tsnjs</a> library used in the interactive diagrams.</p>
   <p>This work was made possible by the support of the <a href="https://research.google.com/teams/brain/">Google Brain</a> team.
 
-  <h3>Author Contributions</h3>
-  <p>Who did what in the article?.</p>
-
   <h3 id="citation">Errors, Reuse, and Citation</h3>
   <p>If you see mistakes or want to suggest changes, please submit a pull request on <a href="{{{distill.github}}}">github</a>.
   <p>Diagrams and text are licensed under Creative Commons Attribution <a href="https://creativecommons.org/licenses/by/2.0/">CC-BY 2.0</a>, unless noted otherwise, with the source available on available on <a href="{{{distill.github}}}">github</a>. The figures that have been reused from other sources don't fall under this license and can be recognized by a note in their caption: "Figure from …".
