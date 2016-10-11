@@ -15,6 +15,7 @@
     justify-content: center;
     width: 700px;
     left: calc(50% - 350px);
+    z-index: 100;
   }
 
   #tray.modal {
@@ -198,12 +199,14 @@
   d3.select("body").on("keydown", function() {
     if(d3.event.keyCode === 27) {
       setRunning(false)
-      d3.select("#tray").classed("modal", false)
+      d3.select("#tray").classed("modal", false);
+      d3.selectAll(".runner").classed("selected", false);
     }
   })
   d3.select("#tray-close").on("click", function() {
-    setRunning(false)
+    setRunning(false);
     d3.select("#tray").classed("modal", false)
+    d3.selectAll(".runner").classed("selected", false);
   })
 
   /* Tray Controls */

@@ -28,21 +28,30 @@
     overflow: hidden;
   }
   #data-menu .demo-data {
+    cursor: pointer;
+    position: relative;
     font-size: 10px;
     line-height: 1.2em;
     box-sizing: border-box;
     float: left;
-    margin: 0 12px 12px 0;
-    padding: 10px;
-    width: calc(16.5% - 12px);
+    margin: 4px;
+    padding: 8px;
+    width: calc(16.5% - 8px);
     background: white;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.08);
   }
-  #data-menu .demo-data.selected {
-    border: 4px solid steelblue;
-
+  #data-menu .demo-data.selected::after {
+    content: "";
+    border: 3px solid rgba(70, 130, 180, 0.8);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    border-radius: 4px;
   }
   #data-menu .demo-data span {
     display: none;
