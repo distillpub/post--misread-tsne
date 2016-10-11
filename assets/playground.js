@@ -35,10 +35,10 @@ function main() {
     return params[key] === undefined ? fallback : params[key];
   }
   GLOBALS.state = {
-    perplexity: +getParam('perplexity', 30),
-    epsilon: +getParam('epsilon', 10),
-    demo: +getParam('demo', 0),
-    demoParams: getParam('demoParams', '50,2').split(',').map(Number)
+    perplexity: +getParam('perplexity', 10),
+    epsilon: +getParam('epsilon', 5),
+    demo: +getParam('demo', 15),
+    demoParams: getParam('demoParams', '13,2').split(',').map(Number)
   };
 
   // Utility function for creating value sliders.

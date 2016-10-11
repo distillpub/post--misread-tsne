@@ -140,7 +140,7 @@
       var slider = makeTraySlider(dataSliders.node(), option.name,
         option.min, option.max, value, function() {
           // when this one updates we change the appropriate state
-          GLOBALS.trayState.demoParams[i] = slider.value
+          GLOBALS.trayState.demoParams[i] = +slider.value
           runTrayState();
         });
     });
@@ -185,7 +185,7 @@
     var demo = demosByName[figure.dataset];
     var state = {
       demo: demos[demo.index],
-      demoParams: figure.params,
+      demoParams: figure.params.map(function(d) { return d}),
       perplexity: example.perplexity,
       epsilon: example.epsilon
     }
