@@ -1,22 +1,24 @@
 <style>
   #tray {
-    border-top: 1px solid rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     background: white;
     padding: 20px;
-    box-shadow: 0px -2px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.1);
     position: fixed;
-    transition: bottom 0.5s;
+    transition: top 0.5s;
     width: 100%;
     box-sizing: border-box;
     left: 0;
     height: 300px;
-    bottom: -320px;
+    top: -320px;
     display: flex;
     justify-content: center;
+    width: 700px;
+    left: calc(50% - 350px);
   }
 
   #tray.modal {
-    bottom: 0px;
+    top: -1px;
   }
 
   #tray-content {
@@ -33,7 +35,7 @@
     font-size: 13px;
     line-height: 1.5em;
     height: 100%;
-    width: 300px;
+    width: 200px;
   }
   #tray-options #tray-controls {
     margin-bottom: 24px;
