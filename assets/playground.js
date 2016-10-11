@@ -43,21 +43,12 @@ function main() {
 
   // Utility function for creating value sliders.
   function makeSlider(container, name, min, max, start) {
-    /*
-    var label = document.createElement('text');
-    label.innerText = name + ' ';
-    container.appendChild(label);
-    */
-
     var dis = d3.select(container)
     dis.append("span").classed("slider-label-" + name, true)
       .text(name + ' ')
     var value = dis.append("span").classed("slider-value-" + name, true)
       .text(start)
 
-    //var currentValueLabel = document.createElement('text');
-    //currentValueLabel.innerText = start;
-    //container.appendChild(currentValueLabel);
     var slider = dis.append("input")
       .attr("type", "range")
       .attr("min", min)
@@ -67,19 +58,6 @@ function main() {
       .on("input", function() {
         value.text(slider.node().value);
       })
-      /*
-    var slider = document.createElement('input');
-    slider.type = 'range';
-    slider.min = min;
-    slider.max = max;
-    slider.value = start;
-    slider.onchange = updateParameters;
-    slider.oninput = function() {
-      value.text(slider.value);
-    }
-    container.appendChild(slider);
-    container.appendChild(document.createElement('br'));
-    */
     return slider.node();
   }
 
