@@ -1,40 +1,41 @@
 <style>
   #tray {
-    border: 1px solid #ddd;
-    background: #fcfcfc;
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
+    background: white;
     padding: 20px;
-    box-shadow: 0px 0px 5px 1px #ccc;
+    box-shadow: 0px -2px 12px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    transition: bottom 0.5s;
+    width: 100%;
+    box-sizing: border-box;
+    left: 0;
+    height: 300px;
+    bottom: -320px;
+    display: flex;
+    justify-content: center;
   }
 
   #tray.modal {
-    display: block;
-    position: fixed;
-    left: 10px;
-    right: 10px;
     bottom: 0px;
   }
 
   #tray-content {
-    float: left;
-    width: 50%;
+    width: 300px;
+    height: 100%;
     font-size: 12px;
   }
   #tray-content canvas {
-    width: 100%;
-    max-width: 300px;
-    max-height: 300px;
+    height: 100%;
   }
 
-
   #tray-options {
-    float: right;
     padding-left: 36px;
     font-size: 13px;
     line-height: 1.5em;
-    width: 45%;
+    height: 100%;
+    width: 300px;
   }
   #tray-options #tray-controls {
-    width: 45%;
     margin-bottom: 24px;
     display: flex;
     align-items: center;
@@ -64,16 +65,9 @@
     text-align: center;
     width: 48px;
   }
-
   #tray-data-sliders {
-    width: 45%;
-    margin: 10px;
-    padding: 10px;
   }
   #tray-tsne-sliders {
-    width: 45%;
-    margin: 10px;
-    padding: 10px;
   }
   #tray-close {
     position: absolute;
@@ -82,8 +76,7 @@
     cursor: pointer;
     outline: none;
     border-radius: 50%;
-    background: salmon;
-    color: white;
+    background: white;
     width: 48px;
     height: 48px;
     border: none;
