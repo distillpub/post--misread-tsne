@@ -236,7 +236,10 @@ Don't let the hidden "magic" scare you away from the whole technique, though. Th
 <section class="appendix">
 
   <h3>Acknowledgments</h3>
-  <p>We are very grateful to ...</p>
+  <p>We are grateful to Chris Olah and Shan Carter for creating this platform, and for their advice and editing
+     during the writing process.
+     Daniel Smilkov provided many helpful comments. We also thank Andrej Karpathy for creating the
+     <a href="https://github.com/karpathy/tsnejs">tsnjs</a> library used in the interactive diagrams.</p>
   <p>This work was made possible by the support of the <a href="https://research.google.com/teams/brain/">Google Brain</a> team.
 
   <h3>Author Contributions</h3>
