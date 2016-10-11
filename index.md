@@ -24,7 +24,6 @@
     font-size: 21px;
     max-width: 740px;
     font-weight: 300;
-    margin-bottom: 36px;
     line-height: 1.5em;
   }
   .runners {
