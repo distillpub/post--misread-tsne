@@ -6,6 +6,7 @@
 <script src="assets/figures.js"></script>
 
 <style>
+  {{> assets/sliders.css}}
   .tsne-group {
     width: 100%;
     overflow: hidden;
@@ -20,8 +21,11 @@
   }
   h2.description {
     text-align: center;
-    font-size: 20px;
-    max-width: 700px;
+    font-size: 21px;
+    max-width: 740px;
+    font-weight: 300;
+    margin-bottom: 36px;
+    line-height: 1.5em;
   }
   .runners {
     width: calc(5 * 100% / 6);
@@ -52,6 +56,10 @@
   }
   .runner .step.done {
     font-weight: bold;
+  }
+
+  section {
+    overflow: hidden;
   }
 </style>
 
@@ -91,16 +99,14 @@ That's not the end of the complications. The t-SNE algorithm doesn't always prod
 Let's start with the "hello world" of dimensionality reduction: a data set of two widely separated clusters.
 Take two unit Gaussians in the plane, as shown in the lefthand diagram. For clarity, the two clusters are color coded. The diagrams at right show t-SNE plots for five different perplexity values.
 
-<div class="w-page tsne-group" id="figures-01">
-  {{> assets/figures_01.html }}
-</div>
+<section class="w-page tsne-group" id="figures-01" data-id="01">
+</section>
 
 With perplexity values in the range (5 - 50) suggested by van der Maaten & Hinton, the diagrams do show these clusters. Outside that range, things get a little weird. With perplexity 2, local variations dominate; at perplexity 100, the clusters merge into one blob.
 
 Each of the plots above was made with 5,000 iterations with a learning rate (often called "epsilon") of 10, and had reached a point of stability by step 5,000. How much of a difference do those values make? In our experience, the most important thing is to iterate until reaching a stable configuration.
 
-<section class="w-page" id="figures-02">
-  {{> assets/figures_02.html }}
+<section class="w-page tsne-group" id="figures-02" data-id="02">
 </section>
 
 The images above show five different runs at perplexity 30. The first four were stopped before stability. After 10, 20, 60, and 120 steps you can see layouts with seeming 1-dimensional and even pointlike images of the clusters. If you see a t-SNE plot with strange "pinched" shapes, chances are the process was stopped too early. Unfortunately, there's no fixed number of steps that yields a stable result. Different data sets can require different numbers of iterations to converge.
@@ -115,8 +121,7 @@ From now on, unless otherwise stated, we'll show results from 5,000 iterations. 
 
 So far, so good. But what if the two clusters have different standard deviations, and so different sizes? (By size we mean bounding box measurements, not number of points.) Below are t-SNE plots for a mixture of Gaussians, where one is 10 times as dispersed as the other.
 
-<section class="w-page" id="figures-03">
-  {{> assets/figures_03.html }}
+<section class="w-page tsne-group" id="figures-03" data-id="03">
 </section>
 
 Surprisingly, the two clusters look about same size in the t-SNE plots.
@@ -132,8 +137,7 @@ The bottom line, however, is that you cannot see relative sizes of clusters in a
 
 What about distances _between_ clusters? The next diagrams show three Gaussians of 50 points each, one pair being 5 times as far apart as another pair.
 
-<section class="w-page" id="figures-04">
-  {{> assets/figures_04.html }}
+<section class="w-page tsne-group" id="figures-04" data-id="04">
 </section>
 
 At perplexity 50, the diagram gives a good sense of the global geometry. For lower perplexity values the clusters look equidistant. When the perplexity is 100, we see the global geometry fine, but one of the cluster appears, falsely, much smaller than the others.
@@ -141,8 +145,7 @@ Since perplexity 50 gave us a good picture in this example, can we can always se
 
 Sadly, no. If we add more points to each cluster, the perplexity has to increase to compensate. Here are the t-SNE diagrams for three Gaussian clusters with 200 points each, instead of 50. Now none of the trial perplexity values gives a good result.
 
-<section class="w-page" id="figures-05">
-  {{> assets/figures_05.html }}
+<section class="w-page tsne-group" id="figures-05" data-id="05">
 </section>
 
 It's bad news that seeing global geometry requires fine-tuning perplexity. Real-world data would probably have multiple clusters with different numbers of elements. There may not be one perplexity value that will capture distances across all clusters—and sadly perplexity is a global parameter. Fixing this problem might be an interesting area for future research.
@@ -155,8 +158,7 @@ The basic message is that distances between well-separated clusters in a t-SNE p
 A classic pitfall is thinking you see patterns in what is really just random data. Recognizing noise when you see it is a critical skill, but it takes time to build up the right intuitions. A tricky thing about t-SNE is that it throws a lot of existing intuition out the window.
 The next diagrams show genuinely random data, 500 points drawn from a unit Gaussian distribution in 100 dimensions. The left image is a projection onto the first two coordinates.
 
-<section class="w-page" id="figures-06">
-  {{> assets/figures_06.html }}
+<section class="w-page tsne-group" id="figures-06" data-id="06">
 </section>
 
 The plot with perplexity 2 seems to show dramatic clusters. If you were tuning perplexity to bring out structure in the data, you might think you'd hit the jackpot.
@@ -170,14 +172,12 @@ There's something else interesting, though, which may be a win for t-SNE. At fir
 
 It's rare for data to be distributed in a perfectly symmetric way. Let's take a look at an axis-aligned Gaussian distribution in 50 dimensions, where the standard deviation in coordinate i is 1/i. That is, we're looking at a long-ish ellipsoidal cloud of points.
 
-<section class="w-page" id="figures-07">
-  {{> assets/figures_07.html }}
+<section class="w-page tsne-group" id="figures-07" data-id="07">
 </section>
 
 For high enough perplexity values, the elongated shapes are easy to read. On the other hand, at low perplexity, local effects and meaningless "clumping" take center stage. More extreme shapes also come through, but again only at the right perplexity. For exmaple, here are two clusters of 50 points each in 2D, arranged in parallel lines with a bit of noise.
 
-<section class="w-page" id="figures-08">
-  {{> assets/figures_08.html }}
+<section class="w-page tsne-group" id="figures-08" data-id="08">
 </section>
 
 For a certain range of perplexity the long clusters look close to correct, which is reassuring.
@@ -191,8 +191,7 @@ Even in the best cases, though, there's a subtle distortion: the lines are sligh
 Sometimes you can read topological information off a t-SNE plot, but that typically requires views at multiple perplexities.
 One of the simplest topological properties is containment. The plots below show two groups of 50 points in 50 dimensional space. Both are sampled from symmetric Gaussian distributions centered at the origin, but one is 50 times more tightly dispersed than the other. The "small" distribution is in effect contained in the large one.
 
-<section class="w-page" id="figures-09">
-  {{> assets/figures_09.html }}
+<section class="w-page tsne-group" id="figures-09" data-id="09">
 </section>
 
 The perplexity 30 view shows the basic topology correctly, but again t-SNE greatly exaggerates the size of the smaller group of points. At perplexity 50, there's a new phenomenon: the outer group becomes a circle, as the plot tries to depict the fact that all its are about the same distance from the inner group. If you looked at this image alone, it would be easy to misread these outer points as a one-dimensional structure.
@@ -201,11 +200,9 @@ What about more complicated types of topology? This may be a subject dearer to m
 
 Consider a set of points that trace a link or a knot in three dimensions. Once again, looking at multiple perplexity values gives the most complete picture. Low perplexity values give two completely separate loops; high ones show a kind of global connectivity.
 
-<section class="w-page" id="figures-10">
-  {{> assets/figures_10.html }}
+<section class="w-page tsne-group" id="figures-10" data-id="10">
 </section>
-<section class="w-page" id="figures-11">
-  {{> assets/figures_11.html }}
+<section class="w-page tsne-group" id="figures-11" data-id="11">
 </section>
 
 
@@ -213,17 +210,56 @@ The trefoil knot is an interesting example of how multiple runs affect the outco
 
 The algorithm settles on a circle twice. But in three of the runs it ends up with an arguably suboptimal solution, and these three configurations are quite different. Using the dot color as a guide, you can see that the first and third runs are far from each other.
 
-<section class="w-page" id="figures-12">
-  {{> assets/figures_12.html }}
+<section class="w-page tsne-group" id="figures-12" data-id="12">
 </section>
 
 Five runs at perplexity 50, however, give results that (up to symmetry) are visually identical. Evidently some problems are easier than others to optimize.
 
-<section class="w-page" id="figures-13">
-  {{> assets/figures_13.html }}
+<section class="w-page tsne-group" id="figures-13" data-id="13">
 </section>
+
+---
 
 ## Conclusion
 
 There's a reason that t-SNE has become so popular: it's incredibly flexible, and can often find structure where other dimensionality-reduction algorithms cannot. Unfortunately, that very flexibility makes it tricky to interpret. Out of sight from the user, the algorithm makes all sorts of adjustments that tidy up its visualizations.
 Don't let the hidden "magic" scare you away from the whole technique, though. The good news is that by studying how t-SNE behaves in simple cases, it's possible to develop an intuition for what's going on.
+
+
+<!-- bring the figures to life -->
+{{> assets/figures.html}}
+
+<div class="w-page">
+  {{> assets/tray.html}}
+</div>
+
+<section class="appendix">
+
+  <h3>Acknowledgments</h3>
+  <p>We are very grateful to ...</p>
+  <p>This work was made possible by the support of the <a href="https://research.google.com/teams/brain/">Google Brain</a> team.
+
+  <h3>Author Contributions</h3>
+  <p>Who did what in the article?.</p>
+
+  <h3 id="citation">Errors, Reuse, and Citation</h3>
+  <p>If you see mistakes or want to suggest changes, please submit a pull request on <a href="{{{distill.github}}}">github</a>.
+  <p>Diagrams and text are licensed under Creative Commons Attribution <a href="https://creativecommons.org/licenses/by/2.0/">CC-BY 2.0</a>, unless noted otherwise, with the source available on available on <a href="{{{distill.github}}}">github</a>. The figures that have been reused from other sources don't fall under this license and can be recognized by a note in their caption: "Figure from …".
+  <p>For attribution in academic contexts, please cite this work as
+  <pre class="citation">{{distill.authors}} "{{distill.title}}", Distill, {{distill.firstPublishedYear}}.</pre>
+  <p>BibTeX citation
+  {{=<% %>=}}
+<pre class="citation">@misc{<%distill.slug%>,
+  author = {<%distill.bibtexAuthors%>},
+  title = {<%distill.title%>},
+  year = {<%distill.firstPublishedYear%>},
+  howpublished = {<%distill.url%>}
+}</pre>
+
+  <%={{ }}=%>
+  <h3>References</h3>
+  <ul class="references">
+    <li><a href="https://arxiv.org/pdf/1501.00092.pdf">Dong, C., Loy, C.C., He, K. and Tang, X., 2014. <b>Image super-resolution using deep convolutional networks.</b> arXiv preprint arXiv:1501.00092.</a></li>
+  </ul>
+
+</section>

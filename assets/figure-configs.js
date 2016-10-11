@@ -17,6 +17,7 @@ var figures = [
     params: [50, 2],
     dataset: "Two Clusters",
     no3d: true,
+    noclick: true,
     examples: [
       { id: "01", perplexity: 30, epsilon: 10, dim: 2, step: 10 },
       { id: "02", perplexity: 30, epsilon: 10, dim: 2, step: 20 },

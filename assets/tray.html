@@ -1,0 +1,236 @@
+<style>
+  #tray {
+    border: 1px solid #ddd;
+    background: #fcfcfc;
+    padding: 20px;
+    box-shadow: 0px 0px 5px 1px #ccc;
+  }
+
+  #tray.modal {
+    display: block;
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: 0px;
+  }
+
+  #tray-content {
+    float: left;
+    width: 50%;
+    font-size: 12px;
+  }
+  #tray-content canvas {
+    width: 100%;
+    max-width: 300px;
+    max-height: 300px;
+  }
+
+
+  #tray-options {
+    float: right;
+    padding-left: 36px;
+    font-size: 13px;
+    line-height: 1.5em;
+    width: 45%;
+  }
+  #tray-options #tray-controls {
+    width: 45%;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+  }
+  #tray-controls button {
+    cursor: pointer;
+    outline: none;
+    border-radius: 50%;
+    background: steelblue;
+    color: white;
+    width: 48px;
+    height: 48px;
+    border: none;
+    margin-right: 12px;
+  }
+  #tray-controls .play-pause i {
+    display: none;
+    font-size: 30px;
+  }
+  #tray-controls .play-pause.paused i:nth-child(1) {
+    display: block;
+  }
+  #tray-controls .play-pause.playing i:nth-child(2) {
+    display: block;
+  }
+  #tray-steps-display {
+    text-align: center;
+    width: 48px;
+  }
+
+  #tray-data-sliders {
+    width: 45%;
+    margin: 10px;
+    padding: 10px;
+  }
+  #tray-tsne-sliders {
+    width: 45%;
+    margin: 10px;
+    padding: 10px;
+  }
+  #tray-close {
+    position: absolute;
+    top: 15px;
+    right: 5px;
+    cursor: pointer;
+    outline: none;
+    border-radius: 50%;
+    background: salmon;
+    color: white;
+    width: 48px;
+    height: 48px;
+    border: none;
+    margin-right: 12px;
+
+  }
+</style>
+<div id="tray">
+  <div id="tray-content">
+    <canvas width=400 height=400></canvas>
+  </div>
+
+  <div id="tray-options">
+    <div id="tray-controls">
+      <button class="play-pause">
+        <i class="material-icons">play_arrow</i>
+        <i class="material-icons">pause</i>
+      </button>
+      <button class="restart">
+        <i class="material-icons">refresh</i>
+      </button>
+      <div id="tray-steps-display">
+        Step: <br> <span class="step"></span>
+      </div>
+    </div>
+    <div id="tray-data-sliders"></div>
+    <div id="tray-tsne-sliders"></div>
+    <button id="tray-close"><i class="material-icons">clear</i></button>
+  </div>
+</div>
+
+<script>
+// This depends on playground.js having setup the GLOBAL object
+  function runTrayState() {
+    // Set up t-SNE and start it running.
+    var state = GLOBALS.trayState;
+    var points = state.demo.generator.apply(null, state.demoParams);
+    var canvas = d3.select("#tray-content canvas").node()
+
+    GLOBALS.unpausedBefore = false;
+    setRunning(true);
+
+    runDemo(points, canvas, state, function(step) {
+      d3.select("#tray-controls .step").text(step);
+      if(step > GLOBALS.stepLimit && !GLOBALS.unpausedBefore) {
+        setRunning(false)
+      }
+    })
+  }
+
+  function updateTraySliders() {
+    // we regenerate all the sliders from scratch
+    // we modify the global tray state when a slider is modified
+    var state = GLOBALS.trayState;
+    var dataSliders = d3.select('#tray-data-sliders');
+    dataSliders.html('');
+    state.demo.options.map(function(option, i) {
+      var value = state.demoParams[i];
+      var slider = makeTraySlider(dataSliders.node(), option.name,
+        option.min, option.max, value, function() {
+          // when this one updates we change the appropriate state
+          GLOBALS.trayState.demoParams[i] = slider.value
+          runTrayState();
+        });
+    });
+
+    var tsneSliders = d3.select('#tray-tsne-sliders');
+    tsneSliders.html('');
+    var perpSlider = makeTraySlider(tsneSliders.node(), "Perplexity",
+        1, 100, state.perplexity, function() {
+          GLOBALS.trayState.perplexity = perpSlider.value
+          runTrayState();
+        });
+
+    var epsSlider = makeTraySlider(tsneSliders.node(), "Epsilon",
+        1, 20, state.epsilon, function() {
+          GLOBALS.trayState.epsilon = epsSlider.value
+          runTrayState();
+        });
+
+  }
+
+  function makeTraySlider(container, name, min, max, start, changeCallback) {
+    var dis = d3.select(container)
+    dis.append("span").classed("slider-label-" + name, true)
+      .text(name + ' ')
+    var value = dis.append("span").classed("slider-value-" + name, true)
+      .text(start)
+
+    var slider = dis.append("input")
+      .attr("type", "range")
+      .attr("min", min)
+      .attr("max", max)
+      .attr("value", start)
+      .on("change", changeCallback)
+      .on("input", function() {
+        value.text(slider.node().value);
+      })
+    return slider.node();
+  }
+
+  /* Activate the tray */
+  function updateStateFromFigure(figure, example) {
+    var demo = demosByName[figure.dataset];
+    var state = {
+      demo: demos[demo.index],
+      demoParams: figure.params,
+      perplexity: example.perplexity,
+      epsilon: example.epsilon
+    }
+    GLOBALS.trayState = state;
+    runTrayState()
+    updateTraySliders()
+    d3.select("#tray").classed("modal", true)
+  }
+
+  d3.select("body").on("keydown", function() {
+    if(d3.event.keyCode === 27) {
+      setRunning(false)
+      d3.select("#tray").classed("modal", false)
+    }
+  })
+  d3.select("#tray-close").on("click", function() {
+    setRunning(false)
+    d3.select("#tray").classed("modal", false)
+  })
+
+  /* Tray Controls */
+  var trayPlay = d3.select("#tray-controls .play-pause")
+  function setRunning(r) {
+    GLOBALS.running = r;
+    if (GLOBALS.running) {
+      trayPlay
+        .classed("playing", true)
+        .classed("paused", false)
+    } else {
+      trayPlay
+        .classed("playing", false)
+        .classed("paused", true)
+    }
+  }
+  // Hook up play / pause / restart buttons.
+  trayPlay.on("click", function() {
+    GLOBALS.unpausedBefore = true;
+    setRunning(!GLOBALS.running);
+  })
+
+  /* Tray sliders */
+
+</script>

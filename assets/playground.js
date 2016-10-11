@@ -25,6 +25,7 @@ main();
 // Main entry point.
 function main() {
   // Set state from hash.
+  var format = d3.format(",");
   var params = {};
   window.location.hash.substring(1).split('&').forEach(function(p) {
     var tokens = p.split('=');
@@ -42,21 +43,12 @@ function main() {
 
   // Utility function for creating value sliders.
   function makeSlider(container, name, min, max, start) {
-    /*
-    var label = document.createElement('text');
-    label.innerText = name + ' ';
-    container.appendChild(label);
-    */
-
     var dis = d3.select(container)
     dis.append("span").classed("slider-label-" + name, true)
       .text(name + ' ')
     var value = dis.append("span").classed("slider-value-" + name, true)
       .text(start)
 
-    //var currentValueLabel = document.createElement('text');
-    //currentValueLabel.innerText = start;
-    //container.appendChild(currentValueLabel);
     var slider = dis.append("input")
       .attr("type", "range")
       .attr("min", min)
@@ -66,19 +58,6 @@ function main() {
       .on("input", function() {
         value.text(slider.node().value);
       })
-      /*
-    var slider = document.createElement('input');
-    slider.type = 'range';
-    slider.min = min;
-    slider.max = max;
-    slider.value = start;
-    slider.onchange = updateParameters;
-    slider.oninput = function() {
-      value.text(slider.value);
-    }
-    container.appendChild(slider);
-    container.appendChild(document.createElement('br'));
-    */
     return slider.node();
   }
 
@@ -147,7 +126,7 @@ function main() {
     setRunning(true);
 
     runDemo(points, canvas, GLOBALS.state, function(step) {
-      d3.select("#step").text(step);
+      d3.select("#step").text(format(step));
       if(step > GLOBALS.stepLimit && !GLOBALS.unpausedBefore) {
         setRunning(false)
       }
@@ -157,7 +136,11 @@ function main() {
   var playPause = document.getElementById('play-pause');
   function setRunning(r) {
     GLOBALS.running = r;
-    playPause.innerText = GLOBALS.running ? 'Pause' : 'Play';
+    if (GLOBALS.running) {
+      playPause.setAttribute("class", "playing")
+    } else {
+      playPause.setAttribute("class", "paused")
+    }
   }
 
   // Hook up play / pause / restart buttons.
@@ -196,6 +179,7 @@ function main() {
   },1)
 }
 
+/*
 function updateStateFromFigure(figure, example) {
   var demo = demosByName[figure.dataset];
   //console.log("demo", demo, example)
@@ -215,3 +199,5 @@ d3.select("body").on("keydown", function() {
     d3.select("#playground").classed("modal", false)
   }
 })
+
+*/
