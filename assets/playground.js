@@ -37,7 +37,7 @@ function main() {
   GLOBALS.state = {
     perplexity: +getParam('perplexity', 10),
     epsilon: +getParam('epsilon', 5),
-    demo: +getParam('demo', 15),
+    demo: +getParam('demo', 0),
     demoParams: getParam('demoParams', '13,2').split(',').map(Number)
   };
 

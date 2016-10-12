@@ -26,6 +26,9 @@
   margin-left: 12px;
   cursor: pointer;
 }
+.tsne-group .runner.no-click {
+  cursor: default;
+}
 
 .runner.clickable {
   cursor: pointer;
@@ -144,6 +147,8 @@
           updateStateFromFigure(figure, d, this);
           d3.select(this).classed("selected", true)
         });
+    } else {
+      runners.classed("no-click", true)
     }
 
     runners.append("div")
@@ -153,9 +158,11 @@
           return "assets/figure_" + FIGURE + "_" + d.id + ".png"
         });
 
-    runners.append("i")
+    if(!figure.noclick) {
+      runners.append("i")
         .classed("material-icons", true)
         .text("open_in_browser")
+    }
 
     runners.append("div").classed("caption", true)
       .text(function(d) { return "Perplexity: " + format(d.perplexity); })
