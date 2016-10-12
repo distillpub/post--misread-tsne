@@ -35,14 +35,6 @@
 <h1 class="w-page">{{ distill.title }}</h1>
 <h2 class="description w-page">{{ distill.description }}</h2>
 
-<!--
-<figure class="p-right-margin external">
-  <a href="assets/mnist.png" target="blank">
-    <img src="assets/mnist.png"></img>
-  </a>
-  <figcaption style="bottom: 0px;">A t-SNE embedding of MNIST digits, from van der Maaten & Hinton.</figcaption>
-</figure> -->
-
 
 <div class="w-page">
   {{> assets/playground.html}}
@@ -225,7 +217,7 @@ Don't let the hidden "magic" scare you away from the whole technique, though. Th
   <%={{ }}=%>
   <h3>References</h3>
   <ul class="references">
-    <li><a href="https://arxiv.org/pdf/1501.00092.pdf">Dong, C., Loy, C.C., He, K. and Tang, X., 2014. <b>Image super-resolution using deep convolutional networks.</b> arXiv preprint arXiv:1501.00092.</a></li>
+    <li><a href="https://lvdmaaten.github.io/publications/papers/JMLR_2008.pdf">van der Maaten and Hinton. <b>Visualizing Data using t-SNE.</b> Journal of Machine Learning Research 9 (2008) 2579-2605</a></li>
   </ul>
 
 </section>
