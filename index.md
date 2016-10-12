@@ -57,7 +57,7 @@ We'll walk through a series of simple examples to illustrate what t-SNE diagrams
 
 Before diving in: if you haven't encountered t-SNE before, here's what you need to know about the math behind it. The goal is to take a set of points in a high-dimensional space and find a faithful representation of those points in a lower-dimensional space, typically the 2D plane. The algorithm is non-linear and adapts to the underlying data, performing different transformations on different regions. Those differences can be a major source of confusion.
 
-A second feature of t-SNE is a tuneable parameter, "perplexity," which says (loosely) how to balance attention between local and global aspects of your data. The perplexity value has a complex effect on the resulting pictures. The original paper says, _"The performance of SNE is fairly robust to changes in the perplexity, and typical values are between 5 and 50."_ But the story is more nuanced than that. Getting the most from t-SNE may mean analyzing multiple plots with different perplexities.
+A second feature of t-SNE is a tuneable parameter, "perplexity," which says (loosely) how to balance attention between local and global aspects of your data. The parameter is, in a sense, a guess about the number of close neighbors each point has. The perplexity value has a complex effect on the resulting pictures. The original paper says, _"The performance of SNE is fairly robust to changes in the perplexity, and typical values are between 5 and 50."_ But the story is more nuanced than that. Getting the most from t-SNE may mean analyzing multiple plots with different perplexities.
 
 That's not the end of the complications. The t-SNE algorithm doesn't always produce similar output on successive runs, for example, and there are additional hyperparameters related to the optimization process.
 
@@ -201,7 +201,7 @@ Don't let the hidden "magic" scare you away from the whole technique, though. Th
 <section class="appendix">
 
   <h3>Acknowledgments</h3>
-  <p>We are grateful to Chris Olah and Shan Carter for creating this platform, and for the excellent design and editorial
+  <p>We are grateful to Chris Olah and Shan Carter for creating this platform, and for excellent design and editorial
      help from Shan Carter.
      Daniel Smilkov, James Wexler, and Chi Zeng provided many helpful comments.
      This work was made possible by the support of the Google Brain team. We also thank Andrej Karpathy for creating the
