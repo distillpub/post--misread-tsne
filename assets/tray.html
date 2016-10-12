@@ -124,12 +124,12 @@
     var canvas = d3.select("#tray-content canvas").node()
 
     GLOBALS.unpausedBefore = false;
-    setRunning(true);
+    setTrayRunning(true);
 
     runDemo(points, canvas, state, function(step) {
       d3.select("#tray-controls .step").text(step);
       if(step > GLOBALS.stepLimit && !GLOBALS.unpausedBefore) {
-        setRunning(false)
+        setTrayRunning(false)
       }
     })
   }
@@ -203,20 +203,20 @@
 
   d3.select("body").on("keydown", function() {
     if(d3.event.keyCode === 27) {
-      setRunning(false)
+      setTrayRunning(false)
       d3.select("#tray").classed("modal", false);
       d3.selectAll(".runner").classed("selected", false);
     }
   })
   d3.select("#tray-close").on("click", function() {
-    setRunning(false);
+    setTrayRunning(false);
     d3.select("#tray").classed("modal", false)
     d3.selectAll(".runner").classed("selected", false);
   })
 
   /* Tray Controls */
   var trayPlay = d3.select("#tray-controls .play-pause")
-  function setRunning(r) {
+  function setTrayRunning(r) {
     GLOBALS.running = r;
     if (GLOBALS.running) {
       trayPlay
@@ -231,7 +231,7 @@
   // Hook up play / pause / restart buttons.
   trayPlay.on("click", function() {
     GLOBALS.unpausedBefore = true;
-    setRunning(!GLOBALS.running);
+    setTrayRunning(!GLOBALS.running);
   })
 
   /* Tray sliders */

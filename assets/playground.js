@@ -10,6 +10,7 @@
 
 // Global variable for whether we should keep optimizing.
 var currentThread = 0;
+var playgroundThread = 0;
 var GLOBALS = {
   running: true,
   unpausedBefore: false,
@@ -125,7 +126,7 @@ function main() {
     GLOBALS.unpausedBefore = false;
     setRunning(true);
 
-    runDemo(points, canvas, GLOBALS.state, function(step) {
+    playgroundThread = runDemo(points, canvas, GLOBALS.state, function(step) {
       d3.select("#step").text(format(step));
       if(step > GLOBALS.stepLimit && !GLOBALS.unpausedBefore) {
         setRunning(false)
@@ -136,6 +137,7 @@ function main() {
   var playPause = document.getElementById('play-pause');
   function setRunning(r) {
     GLOBALS.running = r;
+    GLOBALS.playgroundRunning = r;
     if (GLOBALS.running) {
       playPause.setAttribute("class", "playing")
     } else {
@@ -177,27 +179,26 @@ function main() {
   setTimeout(function() {
     showDemo(GLOBALS.state.demo, true);
   },1)
-}
 
-/*
-function updateStateFromFigure(figure, example) {
-  var demo = demosByName[figure.dataset];
-  //console.log("demo", demo, example)
-  GLOBALS.state.demo = demo.index
-  GLOBALS.state.demoParams = figure.params
-  GLOBALS.state.perplexity = example.perplexity
-  GLOBALS.state.epsilon = example.epsilon
-  GLOBALS.perplexitySlider.value = example.perplexity
-  GLOBALS.epsilonSlider.value = example.epsilon
-  d3.select(".slider-value-Perplexity").text(example.perplexity);
-  d3.select(".slider-value-Epsilon").text(example.epsilon);
-  GLOBALS.showDemo(demo.index, true)
-  d3.select("#playground").classed("modal", true)
+  d3.select(window).on("scroll", function() {
+    var playground = d3.select("#playground").node();
+    var bbox = playground.getBoundingClientRect()
+    if(bbox.top + bbox.height < 0) {
+      if(GLOBALS.playgroundRunning) {
+        //console.log("turning off")
+        setRunning(false)
+      }
+    } else {
+      if(!GLOBALS.playgroundRunning) {
+        //console.log("turning on")
+        if(playgroundThread !== currentThread) {
+          // we need to reset the playground because we've lost our thread
+          // this happens when we run an example after scrolling down.
+          updateParameters();
+        } else {
+          setRunning(true)
+        }
+      }
+    }
+  })
 }
-d3.select("body").on("keydown", function() {
-  if(d3.event.keyCode === 27) {
-    d3.select("#playground").classed("modal", false)
-  }
-})
-
-*/

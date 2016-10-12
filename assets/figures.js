@@ -72,7 +72,7 @@ function runDemo(points, canvas, options, stepCb) {
     }, timeout)
   }
   improve();
-  //return runner;
+  return thread;
 }
 
 
