@@ -65,8 +65,7 @@ That's not the end of the complications. The t-SNE algorithm doesn't always prod
 
 ## 1. Those hyperparameters really matter
 
-Let's start with the "hello world" of dimensionality reduction: a data set of two widely separated clusters.
-Take two unit Gaussians in the plane, as shown in the lefthand diagram. For clarity, the two clusters are color coded. The diagrams at right show t-SNE plots for five different perplexity values.
+Let's start with the "hello world" of t-SNE: a data set of two widely separated clusters. To make things as simple as possible, we'll consider clusters in a 2D plane, as shown in the lefthand diagram. (For clarity, the two clusters are color coded.) The diagrams at right show t-SNE plots for five different perplexity values.
 
 <section class="w-page tsne-group" id="figures-01" data-id="01">
 </section>
@@ -88,13 +87,13 @@ From now on, unless otherwise stated, we'll show results from 5,000 iterations. 
 
 ## 2. Cluster sizes in a t-SNE plot mean nothing
 
-So far, so good. But what if the two clusters have different standard deviations, and so different sizes? (By size we mean bounding box measurements, not number of points.) Below are t-SNE plots for a mixture of Gaussians, where one is 10 times as dispersed as the other.
+So far, so good. But what if the two clusters have different standard deviations, and so different sizes? (By size we mean bounding box measurements, not number of points.) Below are t-SNE plots for a mixture of Gaussians in plane, where one is 10 times as dispersed as the other.
 
 <section class="w-page tsne-group" id="figures-03" data-id="03">
 </section>
 
 Surprisingly, the two clusters look about same size in the t-SNE plots.
-What's going on? The t-SNE algorithm adapts its notion of "distance" to regional density variations in the data set. As a result, it naturally expands dense clusters, and contracts sparse ones, evening out cluster sizes. To be clear, this is a different effect than the run-of-the-mill fact that any dimensionality reduction technique will distort distances. (In fact in this example all data was two-dimensional to begin with.) Rather, density equalization happens by design and is a predictable feature of t-SNE.
+What's going on? The t-SNE algorithm adapts its notion of "distance" to regional density variations in the data set. As a result, it naturally expands dense clusters, and contracts sparse ones, evening out cluster sizes. To be clear, this is a different effect than the run-of-the-mill fact that any dimensionality reduction technique will distort distances. (After all, in this example all data was two-dimensional to begin with.) Rather, density equalization happens by design and is a predictable feature of t-SNE.
 
 The bottom line, however, is that you cannot see relative sizes of clusters in a t-SNE plot.
 
@@ -144,7 +143,7 @@ It's rare for data to be distributed in a perfectly symmetric way. Let's take a 
 <section class="w-page tsne-group" id="figures-07" data-id="07">
 </section>
 
-For high enough perplexity values, the elongated shapes are easy to read. On the other hand, at low perplexity, local effects and meaningless "clumping" take center stage. More extreme shapes also come through, but again only at the right perplexity. For exmaple, here are two clusters of 50 points each in 2D, arranged in parallel lines with a bit of noise.
+For high enough perplexity values, the elongated shapes are easy to read. On the other hand, at low perplexity, local effects and meaningless "clumping" take center stage. More extreme shapes also come through, but again only at the right perplexity. For example, here are two clusters of 50 points each in 2D, arranged in parallel lines with a bit of noise.
 
 <section class="w-page tsne-group" id="figures-08" data-id="08">
 </section>
@@ -177,7 +176,7 @@ Consider a set of points that trace a link or a knot in three dimensions. Once a
 
 The trefoil knot is an interesting example of how multiple runs affect the outcome of t-SNE. Below are five runs of the perplexity-2 view.
 
-The algorithm settles on a circle twice. But in three of the runs it ends up with an arguably suboptimal solution, and these three configurations are quite different. Using the dot color as a guide, you can see that the first and third runs are far from each other.
+The algorithm settles twice on a circle, which at least preserves the intrinsic topology. But in three of the runs it ends up with three different solutions which introduce artificial breaks. Using the dot color as a guide, you can see that the first and third runs are far from each other.
 
 <section class="w-page tsne-group" id="figures-12" data-id="12">
 </section>
