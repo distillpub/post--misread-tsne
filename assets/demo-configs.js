@@ -609,7 +609,7 @@ var demos = [
     name: 'Random Walk',
     description: 'Random (Gaussian) walk. ' +
       'Smoother than you might think.',
-      {
+      options: [{
         name: 'Number Of Points',
         min: 1, max: 1000, start: 100,
       },
