@@ -382,7 +382,8 @@ function randomWalk(n, dim) {
   return points;
 }
 
-// Random walk
+// Random jump: a random walk with
+// additional noise added at each step.
 function randomJump(n, dim) {
   var points = [];
   var current = [];
@@ -410,7 +411,8 @@ function randomJump(n, dim) {
 var demos = [
   {
     name: 'Grid',
-    description: 'A square grid with equal spacing between points',
+    description: 'A square grid with equal spacing between points. ' +
+        'Try convergence at different sizes.',
     options: [
       {
         name: 'Points Per Side',
@@ -437,7 +439,8 @@ var demos = [
   {
     name: 'Three Clusters',
     description: 'Three clusters with equal numbers of points, but at ' +
-         'different distances from each other.',
+         'different distances from each other. Cluster distances are ' +
+         'only apparent at certain perplexities',
     options: [
       {
         name: 'Points Per Cluster',
@@ -453,7 +456,7 @@ var demos = [
   {
     name: 'Two Different-Sized Clusters',
     description: 'Two clusters with equal numbers of points, but different ' +
-        'variances within the clusters',
+        'variances within the clusters. Cluster separation depends on perplexity.',
     options: [
       {
         name: 'Points Per Cluster',
@@ -473,7 +476,7 @@ var demos = [
   {
     name: 'Two Long Linear Clusters',
     description: 'Two sets of points, arranged in parallel lines that ' +
-        'are close to each other.',
+        'are close to each other. Note curvature of lines.',
     options: [
       {
         name: 'Points Per Cluster',
@@ -484,7 +487,8 @@ var demos = [
   },
   {
     name: 'Cluster In Cluster',
-    description: 'A dense, tight cluster inside of a wide, sparse cluster.',
+    description: 'A dense, tight cluster inside of a wide, sparse cluster. ' +
+      'Perplexity makes a big difference here.',
     options: [
       {
         name: 'Points Per Cluster',
@@ -523,7 +527,9 @@ var demos = [
   },
   {
     name: 'Gaussian Cloud',
-    description: 'Points in a unit Gaussian distribution.',
+    description: 'Points in a unit Gaussian distribution. ' +
+      'Data is entirely random, so any visible subclusters are ' +
+      'not statistically significant',
     options: [
       {
         name: 'Number Of Points',
@@ -539,7 +545,7 @@ var demos = [
   {
     name: 'Ellipsoidal Gaussian Cloud',
     description: 'Points in an ellipsoidal Gaussian distribution. ' +
-     ' Dimension n has variace 1/n.',
+     ' Dimension n has variance 1/n. Elongation is visible in plot.',
     options: [
       {
         name: 'Number Of Points',
@@ -554,7 +560,8 @@ var demos = [
   },
   {
     name: 'Trefoil Knot',
-    description: 'Points arranged in 3D, following a trefoil knot.',
+    description: 'Points arranged in 3D, following a trefoil knot. ' +
+      'Different runs may give different results.',
     options: [
       {
         name: 'Number Of Points',
@@ -565,7 +572,8 @@ var demos = [
   },
   {
     name: 'Linked Rings',
-    description: 'Points arranged in 3D, on two linked circles',
+    description: 'Points arranged in 3D, on two linked circles. ' +
+      'Different runs may give different results.',
     options: [
       {
         name: 'Number Of Points',
@@ -587,7 +595,8 @@ var demos = [
   },
   {
     name: 'Orthogonal Steps',
-    description: 'Points related by mutually orthogonal steps',
+    description: 'Points related by mutually orthogonal steps. ' +
+      'Very similar to a random walk.',
     options: [
       {
         name: 'Number Of Points',
@@ -598,8 +607,8 @@ var demos = [
   },
   {
     name: 'Random Walk',
-    description: 'Random (Gaussian) walk',
-    options: [
+    description: 'Random (Gaussian) walk. ' +
+      'Smoother than you might think.',
       {
         name: 'Number Of Points',
         min: 1, max: 1000, start: 100,
@@ -629,7 +638,7 @@ var demos = [
   {
     name: 'Equally Spaced',
     description: 'A set of points, where distances between all pairs of ' +
-        'points are the same.',
+        'points are the same in the original space.',
     options: [
       {
         name: 'Number Of Points',
@@ -656,7 +665,7 @@ var demos = [
 ];
 
 var demosByName = {}
-demos.forEach(function(d,i) {
+demos.forEach(function(d, i) {
   d.index = i;
   demosByName[d.name] = d;
 })
