@@ -38,7 +38,7 @@ function main() {
     perplexity: +getParam('perplexity', 10),
     epsilon: +getParam('epsilon', 5),
     demo: +getParam('demo', 0),
-    demoParams: getParam('demoParams', '13,2').split(',').map(Number)
+    demoParams: getParam('demoParams', '20,2').split(',').map(Number)
   };
 
   // Utility function for creating value sliders.
