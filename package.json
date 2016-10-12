@@ -2,7 +2,7 @@
   "main": "index.md",
   "name": "misread-tsne",
   "distill": {
-    "title": "How t-SNE Can Mislead",
+    "title": "How to Use t-SNE Effectively",
     "description": "Although extremely useful for visualizing high-dimensional data, t-SNE plots can sometimes be mysterious or misleading. By exploring how it behaves in simple case, we can learn to use it more effectively.",
     "url": "http://distill.pub/2016/misread-tsne/",
     "github": "https://github.com/distillpub/post--augmented-rnns",
@@ -12,14 +12,14 @@
       {
         "firstName": "Martin",
         "lastName": "Wattenberg",
-        "personalURL": "http://www.bewitched.com/",
+        "personalURL": "http://hint.fm/",
         "affiliation": "Google Brain",
         "affiliationURL": "http://g.co/brain"
       },
       {
         "firstName": "Fernanda",
         "lastName": "Viégas",
-        "personalURL": "http://fernandaviegas.com/",
+        "personalURL": "http://hint.fm/",
         "affiliation": "Google Brain",
         "affiliationURL": "http://g.co/brain"
       },
