@@ -222,19 +222,21 @@
     GLOBALS.running = r;
     if (GLOBALS.running) {
       trayPlay
-        .classed("playing", true);
+        .classed("playing", true)
         .classed("paused", false);
     } else {
       trayPlay
-        .classed("playing", false);
+        .classed("playing", false)
         .classed("paused", true);
     }
   }
+
   // Hook up play / pause / restart buttons.
   trayPlay.on("click", function() {
     GLOBALS.unpausedBefore = true;
     setTrayRunning(!GLOBALS.running);
   });
+
   d3.select(window).on("scroll.tray", function() {
     if(GLOBALS.trayOpen) {
       if(scrollY < 1000) {
@@ -243,11 +245,8 @@
         d3.select("#tray").classed("modal", false);
         d3.selectAll(".runner").classed("selected", false);
       }
-
     }
-
   });
-
 
   /* Tray sliders */
 
