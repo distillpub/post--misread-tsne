@@ -5,16 +5,11 @@
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     /*border-bottom: 1px solid rgba(0, 0, 0, 0.1);*/
     margin-top: 36px;
-    padding: 36px 12px 0 6px;
+    padding: 36px 0 0 0;
     background: #fcfcfc;
     z-index: 1000;
   }
-  @media(min-width: 1024px) {
-    #playground {
-      padding-left: 0;
-      padding-right: 0;
-    }
-  }
+
   #playground * {
     box-sizing: border-box;
   }
@@ -107,7 +102,6 @@
   /* Data Details */
   #data-details {
     position: relative;
-    margin-left: 18px;
   }
 
   @media(min-width: 768px) {
@@ -230,6 +224,24 @@
     margin-left: 4px;
   }
 
+  #data-details #share {
+    margin-top: 8px;
+    display: block;
+    color: rgba(0, 0, 0, 0.4);
+    text-decoration: none;
+    font-size: 12px;
+  }
+
+  #data-details #share:hover {
+    text-decoration: underline;
+  }
+
+  #data-details #share i {
+    line-height: 0px;
+    position: relative;
+    top: 7px;
+  }
+
 </style>
 <div id="playground">
 
@@ -256,10 +268,10 @@
       <div id="data-options"></div>
       <div id="tsne-options"></div>
     </div>
-    <div id="data-description"></div>
-    <br/>
-    <br/>
-    <a id="share" style="display:none;">Link to this simulation</a>
+    <div id="data-description">
+      <span></span>
+      <a id="share" style="display:none;"><i class="material-icons">link</i> Share this view</a>
+    </div>
   </div>
 
 

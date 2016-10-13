@@ -9,15 +9,15 @@
 <style>
 {{> assets/sliders.css}}
 
-h2:first-of-type {
+.intro h2 {
   font-weight: normal;
   font-size: 16px;
 }
 @media(min-width: 1024px) {
-  h1 {
+  .intro h1 {
     text-align: center;
   }
-  h2:first-of-type {
+  .intro h2 {
     text-align: center;
     font-size: 21px;
     max-width: 760px;
