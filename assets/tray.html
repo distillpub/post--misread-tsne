@@ -199,6 +199,7 @@
     runTrayState()
     updateTraySliders()
     d3.select("#tray").classed("modal", true)
+    GLOBALS.trayOpen = true;
   }
 
   d3.select("body").on("keydown", function() {
@@ -210,6 +211,7 @@
   })
   d3.select("#tray-close").on("click", function() {
     setTrayRunning(false);
+    GLOBALS.trayOpen = false;
     d3.select("#tray").classed("modal", false)
     d3.selectAll(".runner").classed("selected", false);
   })
@@ -220,19 +222,32 @@
     GLOBALS.running = r;
     if (GLOBALS.running) {
       trayPlay
-        .classed("playing", true)
-        .classed("paused", false)
+        .classed("playing", true);
+        .classed("paused", false);
     } else {
       trayPlay
-        .classed("playing", false)
-        .classed("paused", true)
+        .classed("playing", false);
+        .classed("paused", true);
     }
   }
   // Hook up play / pause / restart buttons.
   trayPlay.on("click", function() {
     GLOBALS.unpausedBefore = true;
     setTrayRunning(!GLOBALS.running);
-  })
+  });
+  d3.select(window).on("scroll.tray", function() {
+    if(GLOBALS.trayOpen) {
+      if(scrollY < 1000) {
+        setTrayRunning(false);
+        GLOBALS.trayOpen = false;
+        d3.select("#tray").classed("modal", false);
+        d3.selectAll(".runner").classed("selected", false);
+      }
+
+    }
+
+  });
+
 
   /* Tray sliders */
 

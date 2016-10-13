@@ -177,14 +177,12 @@ function main() {
   //console.log("STATE", GLOBALS.state)
   setTimeout(function() {
     showDemo(GLOBALS.state.demo, true);
-  },1)
+  },1);
 
-  d3.select(window).on("scroll", function() {
-    var playground = document.getElementById("playground");
-    var bbox = playground.getBoundingClientRect()
-    if(bbox.top + bbox.height < 0) {
+  d3.select(window).on("scroll.playground", function() {
+    if(scrollY > 1000) {
       if(GLOBALS.playgroundRunning) {
-        setRunning(false)
+        setRunning(false);
       }
     } else {
       if(!GLOBALS.playgroundRunning) {
