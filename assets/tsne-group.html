@@ -2,6 +2,7 @@
 
 .tsne-group {
   overflow: visible;
+  display: -webkit-flex;
   display: flex;
   flex-direction: column;
   margin-left: 20px;
@@ -10,6 +11,7 @@
 
 @media(min-width: 640px) {
   .tsne-group {
+    -webkit-flex-direction: row;
     flex-direction: row;
   }
 }
@@ -17,8 +19,10 @@
 .tsne-group .original,
 .tsne-group .runner {
   box-sizing: border-box;
+  -webkit-flex-grow: 1;
   flex-grow: 1;
   position: relative;
+  display: -webkit-flex;
   display: flex;
   margin-bottom: 12px;
 }
