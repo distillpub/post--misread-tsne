@@ -9,7 +9,6 @@
 
 
 // Global variable for whether we should keep optimizing.
-var currentThread = 0;
 var playgroundThread = 0;
 var GLOBALS = {
   running: true,
@@ -126,7 +125,7 @@ function main() {
     GLOBALS.unpausedBefore = false;
     setRunning(true);
 
-    playgroundThread = runDemo(points, canvas, GLOBALS.state, function(step) {
+    playgroundThread = runPlayground(points, canvas, GLOBALS.state, function(step) {
       d3.select("#step").text(format(step));
       if(step > GLOBALS.stepLimit && !GLOBALS.unpausedBefore) {
         setRunning(false)
@@ -191,13 +190,16 @@ function main() {
     } else {
       if(!GLOBALS.playgroundRunning) {
         //console.log("turning on")
-        if(playgroundThread !== currentThread) {
+        setRunning(true)
+        /*
+        if(playgroundThread !== currentPlaygroundThread) {
           // we need to reset the playground because we've lost our thread
           // this happens when we run an example after scrolling down.
           updateParameters();
         } else {
           setRunning(true)
         }
+        */
       }
     }
   })
