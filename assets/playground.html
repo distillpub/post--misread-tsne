@@ -121,8 +121,8 @@
 
   @media(min-width: 768px) {
     #data-details #data-controls {
-      width: 55%;
-      margin-right: 5%;
+      width: 50%;
+      margin-right: 10%;
       float: left;
     }
   }
@@ -140,13 +140,14 @@
     color: white;
     width: 25%;
     margin-right: 5%;
-    padding-top: calc(25% - 3px);
+    padding-top: 25%;
+    padding-bottom: 0;
     border: none;
     float: left;
     position: relative;
   }
   #play-controls i {
-    display: inline-block;
+    display: block;
     position: absolute;
     top: 50%;
     left: 0;
@@ -254,13 +255,8 @@
   <div id="data-details">
     <div id="data-controls">
       <div id="play-controls">
-        <button id="play-pause">
-          <i class="material-icons">play_arrow</i>
-          <i class="material-icons">pause</i>
-        </button>
-        <button id="restart">
-          <i class="material-icons">refresh</i>
-        </button>
+        <button id="play-pause"><i class="material-icons">play_arrow</i><i class="material-icons">pause</i></button>
+        <button id="restart"><i class="material-icons">refresh</i></button>
         <div id="steps-display">
           Step<br><span id="step"></span>
         </div>
