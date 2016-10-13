@@ -180,17 +180,15 @@ function main() {
   },1)
 
   d3.select(window).on("scroll", function() {
-    var playground = d3.select("#playground").node();
+    var playground = document.getElementById("playground");
     var bbox = playground.getBoundingClientRect()
     if(bbox.top + bbox.height < 0) {
       if(GLOBALS.playgroundRunning) {
-        //console.log("turning off")
         setRunning(false)
       }
     } else {
       if(!GLOBALS.playgroundRunning) {
-        //console.log("turning on")
-        setRunning(true)
+        // setRunning(true)
         /*
         if(playgroundThread !== currentPlaygroundThread) {
           // we need to reset the playground because we've lost our thread
