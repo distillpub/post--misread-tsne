@@ -1,38 +1,55 @@
 <style>
-.original {
-  width: calc(100% / 6);
-  float: left;
-  position: relative;
-}
 
 .tsne-group {
-  width: 100%;
   overflow: visible;
   display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
-/*.runners {
-  width: calc(5 * 100% / 6);
-  position: relative;
-}*/
-
-.tsne-group .original {
-  padding-right: 12px;
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
+@media(min-width: 640px) {
+  .tsne-group {
+    flex-direction: row;
+  }
 }
 
 .tsne-group .original,
 .tsne-group .runner {
   box-sizing: border-box;
   flex-grow: 1;
-  width: 100%;
   position: relative;
+  display: flex;
+  margin-bottom: 12px;
 }
 
-.tsne-group .runner {
-  margin-left: 12px;
-  cursor: pointer;
+.tsne-group .original {
+  position: relative;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 12px;
 }
+
+@media(min-width: 640px) {
+  .tsne-group .original,
+  .tsne-group .runner {
+    display: block;
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .tsne-group .original {
+    margin-left: 0;
+    padding-right: 12px;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .tsne-group .runner {
+    margin-left: 12px;
+  }
+}
+
 .tsne-group .runner.no-click {
   cursor: default;
 }
@@ -40,6 +57,7 @@
 .runner.clickable {
   cursor: pointer;
 }
+
 .runner.clickable:hover .image {
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
@@ -58,7 +76,6 @@
   top: 1px;
   left: 1px;
   background-color: hsla(207, 44%, 79%, 0.8);
-  /*text-shadow: 0 0 8px rgb(70, 130, 180);*/
   color: steelblue;
   border-radius: 4px;
   opacity: 0;
@@ -81,21 +98,24 @@
   z-index: 10;
 }
 
-.tsne-group .original h3 {
-  font-size: 15px;
-  margin-top: 0;
-}
-
 .tsne-group .image {
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-  margin-bottom: 8px;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
-  width: 100%;
-  padding-top: 100%;
+  width: 150px;
+  padding-top: 150px;
   background: white;
   position: relative;
   transition: border-color 0.3s, box-shadow 0.3s;
+  margin-right: 12px;
+}
+
+@media(min-width: 640px) {
+  .tsne-group .image {
+    width: 100%;
+    padding-top: 100%;
+    margin-right: 0;
+  }
 }
 
 .tsne-group .original .image {
@@ -109,16 +129,24 @@
   width: 90%;
 }
 
-.runner .caption {
+.tsne-group h3.caption {
+  font-size: 15px;
+  margin-top: 12px;
+}
+
+.tsne-group .caption {
   font-size: 12px;
   line-height: 1.6em;
-  margin-top: 0px;
+  margin-top: 12px;
+  width: 100px;
 }
-.runner .step {
 
-}
-.runner .step.done {
-  font-weight: bold;
+@media(min-width: 640px) {
+  .tsne-group .caption,
+  .tsne-group h3.caption {
+    margin-top: 8px;
+    width: 100%;
+  }
 }
 </style>
 
@@ -141,7 +169,7 @@
       .append("img")
         .classed("tsne-plot", true)
         .attr("src", "assets/figure_" + FIGURE + "_" + "original.png");
-    original.append("h3").text("Original")
+    original.append("h3").classed("caption", true).text("Original")
 
     // examples
     var runners = dis.selectAll(".runner").data(figure.examples)
@@ -171,10 +199,11 @@
         .text("open_in_browser")
     }
 
-    runners.append("div").classed("caption", true)
-      .text(function(d) { return "Perplexity: " + format(d.perplexity); })
+    var caption = runners.append("div").classed("caption", true);
 
-    runners.append("div").classed("caption", true).classed("step", true).text(function(d) { return "Step: " + format(d.step); })
+    caption.append("div").text(function(d) { return "Perplexity: " + format(d.perplexity); })
+
+    caption.append("div").text(function(d) { return "Step: " + format(d.step); })
   }
 })()
 </script>
