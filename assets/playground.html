@@ -34,13 +34,27 @@
     line-height: 1.2em;
     box-sizing: border-box;
     float: left;
-    margin: 4px;
-    padding: 8px;
-    width: calc(16.5% - 8px);
+    margin: 2px;
+    padding: 4px;
+    width: calc(33% - 4px);
     background: white;
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 4px;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.08);
+  }
+  @media(min-width: 480px) {
+    #data-menu .demo-data {
+      width: calc(25% - 8px);
+      padding: 8px;
+      margin: 4px;
+    }
+  }
+  @media(min-width: 640px) {
+    #data-menu .demo-data {
+      width: calc(16.5% - 8px);
+      padding: 8px;
+      margin: 4px;
+    }
   }
   #data-menu .demo-data:hover {
   border: 1px solid rgba(0, 0, 0, 0.2);
