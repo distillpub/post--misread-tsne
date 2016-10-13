@@ -30,7 +30,6 @@ function main() {
 
   function setStateFromParams() {
     var params = {};
-    console.log("HASH", window.location.hash)
     window.location.hash.substring(1).split('&').forEach(function(p) {
       var tokens = p.split('=');
       params[tokens[0]] = tokens[1];
@@ -38,7 +37,6 @@ function main() {
     function getParam(key, fallback) {
       return params[key] === undefined ? fallback : params[key];
     }
-    console.log("getting params", getParam('demo', 0))
     GLOBALS.state = {
       perplexity: +getParam('perplexity', 10),
       epsilon: +getParam('epsilon', 5),
@@ -132,7 +130,6 @@ function main() {
   }
 
   function runState() {
-    console.log("RUN STATE", JSON.stringify(GLOBALS.state))
     // Set up t-SNE and start it running.
     var points = demo.generator.apply(null, GLOBALS.state.demoParams);
     var canvas = document.getElementById('output');
