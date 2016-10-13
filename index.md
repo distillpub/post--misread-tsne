@@ -8,15 +8,23 @@
 
 <style>
   {{> assets/sliders.css}}
-  h1 {
-    text-align: center;
-  }
+
   h2.description {
-    text-align: center;
-    font-size: 21px;
-    max-width: 740px;
-    font-weight: 300;
-    line-height: 1.5em;
+    font-weight: normal;
+    font-size: 16px;
+  }
+
+  @media(min-width: 1024px) {
+    h1 {
+      text-align: center;
+    }
+    h2.description {
+      text-align: center;
+      font-size: 21px;
+      max-width: 740px;
+      font-weight: 300;
+      line-height: 1.5em;
+    }
   }
   section {
     overflow: hidden;
