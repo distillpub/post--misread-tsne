@@ -40,79 +40,63 @@ var timescale = d3.scaleLinear()
   .domain([0, 20, 50, 100, 200, 6000])
   .range([60, 30, 20, 10, 0]);
 
-var currentThread = 0;
-// Show an animated t-SNE algorithm.
-function runDemo(points, canvas, options, stepCb) {
+function demoMaker(points, canvas, options, stepCb) {
+  var demo = {};
+  var paused = false;
+  var step = 0;
+  var chunk = 1;
+  var frameId;
+
   var tsne = new tsnejs.tSNE(options);
   var dists = distanceMatrix(points);
   tsne.initDataDist(dists);
-  var step = 0;
-  var chunk = 1;
-  var thread = ++currentThread;
-  //console.log(thread, GLOBALS.running, step)
-  function improve() {
-    if (thread != currentThread) return;
-    if(GLOBALS.running) {
-      if(step > 200) chunk = 10;
-      for(var k = 0; k < chunk; k++) {
-        tsne.step();
-        ++step;
-      }
-      //inform the caller about the current step
-      stepCb(step)
 
-      var solution = tsne.getSolution().map(function(coords, i) {
-        return new Point(coords, points[i].color);
-      });
-      visualize(solution, canvas, ""); //removed message
+  function iterate() {
+    if(paused) return;
+
+    // control speed at which we iterate
+    if(step >= 200) chunk = 10;
+    for(var k = 0; k < chunk; k++) {
+      tsne.step();
+      ++step;
     }
+
+    //inform the caller about the current step
+    stepCb(step)
+
+    // update the solution and render
+    var solution = tsne.getSolution().map(function(coords, i) {
+      return new Point(coords, points[i].color);
+    });
+    visualize(solution, canvas, ""); //removed message
+
+    //control the loop.
     var timeout = timescale(step)
     setTimeout(function() {
-      window.requestAnimationFrame(improve);
+      frameId = window.requestAnimationFrame(iterate);
     }, timeout)
   }
-  improve();
-  return thread;
-}
 
-// Sorry for the duplicate code, couldn't think of a concise way to seperate
-// out this thread model. Ideally we'd keep track of the running state a bit
-// more elegantly
-var currentPlaygroundThread = 0;
-// Show an animated t-SNE algorithm.
-function runPlayground(points, canvas, options, stepCb) {
-  var tsne = new tsnejs.tSNE(options);
-  var dists = distanceMatrix(points);
-  tsne.initDataDist(dists);
-  var step = 0;
-  var chunk = 1;
-  var thread = ++currentPlaygroundThread;
-  //console.log(thread, GLOBALS.running, step)
-  function improve() {
-    if (thread != currentPlaygroundThread) return;
-    if(GLOBALS.running) {
-      if(step > 200) chunk = 10;
-      for(var k = 0; k < chunk; k++) {
-        tsne.step();
-        ++step;
-      }
-      //inform the caller about the current step
-      stepCb(step)
-
-      var solution = tsne.getSolution().map(function(coords, i) {
-        return new Point(coords, points[i].color);
-      });
-      visualize(solution, canvas, ""); //removed message
-    }
-    var timeout = timescale(step)
-    setTimeout(function() {
-      window.requestAnimationFrame(improve);
-    }, timeout)
+  demo.pause = function() {
+    if(paused) return; // already paused
+    paused = true;
+    window.cancelAnimationFrame(frameId)
   }
-  improve();
-  return thread;
+  demo.unpause = function() {
+    if(!paused) return; // already unpaused
+    paused = false;
+    iterate();
+  }
+  demo.paused = function() {
+    return paused;
+  }
+  demo.destroy = function() {
+    demo.pause();
+    delete demo;
+  }
+  iterate();
+  return demo;
 }
-
 
 function runDemoSync(points, canvas, options, stepLimit, no3d) {
   var tsne = new tsnejs.tSNE(options);
@@ -132,7 +116,7 @@ function runDemoSync(points, canvas, options, stepLimit, no3d) {
 }
 
 if(typeof module != "undefined") module.exports = {
-  runDemo: runDemo,
+  demoMaker: demoMaker,
   runDemoSync: runDemoSync,
   getPoints: getPoints,
   FIGURES: FIGURES

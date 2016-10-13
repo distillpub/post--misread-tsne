@@ -11,6 +11,8 @@
 // Global variable for whether we should keep optimizing.
 var playgroundThread = 0;
 var GLOBALS = {
+  playgroundDemo: null, // the object to control running the playground simulation
+  trayDemo: null, // the object to control running the tray simulation
   running: true,
   unpausedBefore: false,
   stepLimit: 5000,
@@ -18,7 +20,6 @@ var GLOBALS = {
   showDemo: null,
   perplexitySlider: null,
   epsilonSlider: null,
-
 }
 
 main();
@@ -26,20 +27,26 @@ main();
 function main() {
   // Set state from hash.
   var format = d3.format(",");
-  var params = {};
-  window.location.hash.substring(1).split('&').forEach(function(p) {
-    var tokens = p.split('=');
-    params[tokens[0]] = tokens[1];
-  });
-  function getParam(key, fallback) {
-    return params[key] === undefined ? fallback : params[key];
+
+  function setStateFromParams() {
+    var params = {};
+    console.log("HASH", window.location.hash)
+    window.location.hash.substring(1).split('&').forEach(function(p) {
+      var tokens = p.split('=');
+      params[tokens[0]] = tokens[1];
+    });
+    function getParam(key, fallback) {
+      return params[key] === undefined ? fallback : params[key];
+    }
+    console.log("getting params", getParam('demo', 0))
+    GLOBALS.state = {
+      perplexity: +getParam('perplexity', 10),
+      epsilon: +getParam('epsilon', 5),
+      demo: +getParam('demo', 0),
+      demoParams: getParam('demoParams', '20,2').split(',').map(Number)
+    };
   }
-  GLOBALS.state = {
-    perplexity: +getParam('perplexity', 10),
-    epsilon: +getParam('epsilon', 5),
-    demo: +getParam('demo', 0),
-    demoParams: getParam('demoParams', '20,2').split(',').map(Number)
-  };
+  setStateFromParams();
 
   // Utility function for creating value sliders.
   function makeSlider(container, name, min, max, start) {
@@ -105,7 +112,14 @@ function main() {
     GLOBALS.state.demoParams = optionControls.map(function(s) {return s.value;});
     GLOBALS.state.perplexity = perplexitySlider.value;
     GLOBALS.state.epsilon = epsilonSlider.value;
-    // Set window location hash.
+
+    d3.select("#share").style("display", "")
+      .attr("href", "#" + generateHash())
+
+    runState();
+  }
+
+  function generateHash() {
     function stringify(map) {
       var s = '';
       for (key in map) {
@@ -113,24 +127,30 @@ function main() {
       }
       return s.substring(1);
     }
-    window.location.hash = stringify(GLOBALS.state);
-    runState();
+    //window.location.hash = stringify(GLOBALS.state);
+    return stringify(GLOBALS.state);
   }
 
   function runState() {
+    console.log("RUN STATE", JSON.stringify(GLOBALS.state))
     // Set up t-SNE and start it running.
     var points = demo.generator.apply(null, GLOBALS.state.demoParams);
     var canvas = document.getElementById('output');
 
-    GLOBALS.unpausedBefore = false;
-    setRunning(true);
-
-    playgroundThread = runPlayground(points, canvas, GLOBALS.state, function(step) {
+    // if there was already a playground demo going, lets destroy it and make a new one
+    if(GLOBALS.playgroundDemo) {
+      GLOBALS.playgroundDemo.destroy();
+      delete GLOBALS.playgroundDemo;
+    }
+    //runPlayground(points, canvas, GLOBALS.state, function(step) {
+    GLOBALS.playgroundDemo = demoMaker(points, canvas, GLOBALS.state, function(step) {
       d3.select("#step").text(format(step));
       if(step > GLOBALS.stepLimit && !GLOBALS.unpausedBefore) {
         setRunning(false)
       }
     })
+    GLOBALS.unpausedBefore = false;
+    setRunning(true);
   }
 
   var playPause = document.getElementById('play-pause');
@@ -138,8 +158,10 @@ function main() {
     GLOBALS.running = r;
     GLOBALS.playgroundRunning = r;
     if (GLOBALS.running) {
+      GLOBALS.playgroundDemo.unpause();
       playPause.setAttribute("class", "playing")
     } else {
+      GLOBALS.playgroundDemo.pause();
       playPause.setAttribute("class", "paused")
     }
   }
@@ -151,8 +173,9 @@ function main() {
   };
 
   document.getElementById('restart').onclick = updateParameters;
+
   // Show a given demo.
-  GLOBALS.showDemo = showDemo
+  GLOBALS.showDemo = showDemo;
   function showDemo(index, initializeFromState) {
     GLOBALS.state.demo = index;
     demo = demos[index];
@@ -171,13 +194,24 @@ function main() {
       .classed("selected", false)
       .filter(function(d,i) { return i === index })
       .classed("selected", true)
+
     updateParameters();
   }
 
-  //console.log("STATE", GLOBALS.state)
+  // run initial demo;
   setTimeout(function() {
     showDemo(GLOBALS.state.demo, true);
+    // hide the share link initially
+    d3.select("#share").style("display", "none")
   },1);
+
+  d3.select(window).on("popstate", function() {
+    setTimeout(function() {
+      //updateParameters();
+      setStateFromParams();
+      showDemo(GLOBALS.state.demo, true)
+    },1)
+  })
 
   d3.select(window).on("scroll.playground", function() {
     if(scrollY > 1000) {
@@ -187,15 +221,6 @@ function main() {
     } else {
       if(!GLOBALS.playgroundRunning) {
         // setRunning(true)
-        /*
-        if(playgroundThread !== currentPlaygroundThread) {
-          // we need to reset the playground because we've lost our thread
-          // this happens when we run an example after scrolling down.
-          updateParameters();
-        } else {
-          setRunning(true)
-        }
-        */
       }
     }
   })

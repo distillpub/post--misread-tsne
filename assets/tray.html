@@ -123,15 +123,20 @@
     var points = state.demo.generator.apply(null, state.demoParams);
     var canvas = d3.select("#tray-content canvas").node()
 
-    GLOBALS.unpausedBefore = false;
-    setTrayRunning(true);
-
-    runDemo(points, canvas, state, function(step) {
+    // if there was already a playground demo going, lets destroy it and make a new one
+    if(GLOBALS.trayDemo) {
+      GLOBALS.trayDemo.destroy();
+      delete GLOBALS.trayDemo;
+    }
+    GLOBALS.trayDemo = demoMaker(points, canvas, state, function(step) {
       d3.select("#tray-controls .step").text(step);
-      if(step > GLOBALS.stepLimit && !GLOBALS.unpausedBefore) {
+      if(step >= state.stepLimit && !GLOBALS.trayUnpausedBefore) {
         setTrayRunning(false)
       }
     })
+
+    GLOBALS.trayUnpausedBefore = false;
+    setTrayRunning(true);
   }
 
   function updateTraySliders() {
@@ -193,7 +198,8 @@
       demo: demos[demo.index],
       demoParams: figure.params.map(function(d) { return d}),
       perplexity: example.perplexity,
-      epsilon: example.epsilon
+      epsilon: example.epsilon,
+      stepLimit: example.step
     }
     GLOBALS.trayState = state;
     runTrayState()
@@ -221,10 +227,12 @@
   function setTrayRunning(r) {
     GLOBALS.running = r;
     if (GLOBALS.running) {
+      GLOBALS.trayDemo.unpause();
       trayPlay
         .classed("playing", true)
         .classed("paused", false);
     } else {
+      GLOBALS.trayDemo.pause();
       trayPlay
         .classed("playing", false)
         .classed("paused", true);
@@ -233,7 +241,7 @@
 
   // Hook up play / pause / restart buttons.
   trayPlay.on("click", function() {
-    GLOBALS.unpausedBefore = true;
+    GLOBALS.trayUnpausedBefore = true;
     setTrayRunning(!GLOBALS.running);
   });
 
