@@ -5,9 +5,15 @@
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     /*border-bottom: 1px solid rgba(0, 0, 0, 0.1);*/
     margin-top: 36px;
-    padding: 36px 0;
+    padding: 36px 12px;
     background: #fcfcfc;
     z-index: 1000;
+  }
+  @media(min-width: 1024px) {
+    #playground {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
   #playground * {
     box-sizing: border-box;
@@ -20,12 +26,25 @@
     top: 50px;
   }
 
+  /* Playground Canvas */
+  #playground-canvas {
+    float: left;
+    width: 55%;
+  }
+
+  #playground-canvas canvas {
+    width: 100%;
+  }
+
   /* Data Menu */
   #data-menu {
     /*float: left;*/
     /*width: 25%*/
+    width: 40%;
+    float: left;
     margin-bottom: 24px;
     overflow: hidden;
+    margin-left: 5%;
   }
   #data-menu .demo-data {
     cursor: pointer;
@@ -49,7 +68,7 @@
       margin: 4px;
     }
   }
-  @media(min-width: 640px) {
+  @media(min-width: 768px) {
     #data-menu .demo-data {
       width: calc(16.5% - 8px);
       padding: 8px;
@@ -85,59 +104,71 @@
     opacity: 1;
   }
 
-  /* Playground Canvas */
-  #playground-canvas {
-    float: left;
-    width: 55%;
-    font-size: 12px;
-  }
-  #playground-canvas canvas {
+  /* Data Details */
+  #data-details {
     width: 100%;
+    position: relative;
   }
 
-  /* Options */
-  #options {
-    float: left;
-    padding-left: 36px;
-    font-size: 13px;
-    line-height: 1.5em;
-    width: 45%;
+  @media(min-width: 768px) {
+    #data-details {
+      width: 40%;
+      float: right;
+    }
   }
-  #options #data-description {
-    width: 43%;
+
+  #data-details #data-controls {
+    width: 40%;
     float: right;
-    font-size: 16px;
-    line-height: 1.6em;
+    position: relative;
+    overflow: hidden;
+    font-size: 13px;
   }
-  #options input {
-    display: block;
-    width: 100%;
-    margin: 12px 0 16px 0;
+
+  @media(min-width: 768px) {
+    #data-details #data-controls {
+      width: 55%;
+      margin-right: 5%;
+      float: left;
+    }
   }
-  #options #play-controls {
-    width: 45%;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
+
+  #data-details #play-controls {
+    margin-bottom: 18px;
+    overflow: hidden;
+    position: relative;
   }
-  #play-controls button {
+  #data-details #play-controls button {
     cursor: pointer;
     outline: none;
     border-radius: 50%;
     background: steelblue;
     color: white;
-    width: 48px;
-    height: 48px;
+    width: 25%;
+    margin-right: 5%;
+    padding-top: calc(25% - 3px);
     border: none;
-    margin-right: 12px;
+    float: left;
+    position: relative;
   }
-  #play-controls #play-pause {
+  #play-controls i {
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 36px;
+    font-size: 24px;
+    line-height: 0;
   }
-  #play-controls #restart {
+  @media(min-width: 768px) {
+    #play-controls i {
+      font-size: 30px;
+    }
   }
   #play-controls #play-pause i {
     display: none;
-    font-size: 30px;
+    position: absolute;
   }
   #play-controls #play-pause.paused i:nth-child(1) {
     display: block;
@@ -145,12 +176,51 @@
   #play-controls #play-pause.playing i:nth-child(2) {
     display: block;
   }
+
   #steps-display {
+    float: left;
     text-align: center;
-    width: 48px;
+    width: 25%;
+    line-height: 1.5em;
+    font-size: 13px;
+  }
+
+  @media(min-width: 1024px) {
+    #steps-display {
+      font-size: 16px;
+      line-height: 1.6em;
+    }
+  }
+  #data-details #data-description {
+    width: 55%;
+    margin-right: 5%;
+    float: right;
     font-size: 16px;
     line-height: 1.6em;
   }
+
+  @media(min-width: 768px) {
+    #data-details #data-description {
+      width: 40%;
+      float: left;
+      margin-right: 0;
+    }
+  }
+
+  /* Options */
+  #data-details #options {
+    float: left;
+    padding-left: 36px;
+    font-size: 13px;
+    line-height: 1.5em;
+    width: 45%;
+  }
+  #data-details input {
+    display: block;
+    width: 100%;
+    margin: 8px 0 16px 0;
+  }
+
   #options #data-options {
     width: 45%;
     margin-left: 4px;
@@ -167,23 +237,27 @@
     <canvas id="output" width=600 height=600></canvas>
   </div>
 
-  <div id="options">
-    <div id="data-menu"></div>
-    <div id="data-description"></div>
-    <div id="play-controls">
-      <button id="play-pause">
-        <i class="material-icons">play_arrow</i>
-        <i class="material-icons">pause</i>
-      </button>
-      <button id="restart">
-        <i class="material-icons">refresh</i>
-      </button>
-      <div id="steps-display">
-        Step<br><span id="step"></span>
+  <div id="data-menu"></div>
+
+  <div id="data-details">
+    <div id="data-controls">
+      <div id="play-controls">
+        <button id="play-pause">
+          <i class="material-icons">play_arrow</i>
+          <i class="material-icons">pause</i>
+        </button>
+        <button id="restart">
+          <i class="material-icons">refresh</i>
+        </button>
+        <div id="steps-display">
+          Step<br><span id="step"></span>
+        </div>
       </div>
+      <div id="data-options"></div>
+      <div id="tsne-options"></div>
     </div>
-    <div id="data-options"></div>
-    <div id="tsne-options"></div>
+    <div id="data-description"></div>
+
   </div>
 
 
