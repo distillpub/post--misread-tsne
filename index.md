@@ -7,38 +7,38 @@
 {{> assets/tray.html}}
 
 <style>
-  {{> assets/sliders.css}}
+{{> assets/sliders.css}}
 
-  h2.description {
-    font-weight: normal;
-    font-size: 16px;
+h2:first-of-type {
+  font-weight: normal;
+  font-size: 16px;
+}
+@media(min-width: 1024px) {
+  h1 {
+    text-align: center;
   }
-
-  @media(min-width: 1024px) {
-    h1 {
-      text-align: center;
-    }
-    h2.description {
-      text-align: center;
-      font-size: 21px;
-      max-width: 740px;
-      font-weight: 300;
-      line-height: 1.5em;
-    }
+  h2:first-of-type {
+    text-align: center;
+    font-size: 21px;
+    max-width: 760px;
+    margin: 0 auto;
+    font-weight: 300;
+    line-height: 1.5em;
   }
-  section {
-    overflow: hidden;
-  }
+}
+section {
+  overflow: hidden;
+}
 </style>
 
-<h1 class="w-page">{{ distill.title }}</h1>
-<h2 class="description w-page">{{ distill.description }}</h2>
-
+<div class="w-page intro">
+  <h1>{{ distill.title }}</h1>
+  <h2>{{ distill.description }}</h2>
+</div>
 
 <div class="w-page">
   {{> assets/playground.html}}
 </div>
-
 {{> byline.html}}
 
 A popular method for exploring high-dimensional data is something called t-SNE, introduced by [van der Maaten and Hinton in 2008](https://lvdmaaten.github.io/publications/papers/JMLR_2008.pdf). The technique has become widespread in the field of machine learning, since it has an almost magical ability to create compelling two-dimensonal "maps" from data with hundreds or even thousands of dimensions.
