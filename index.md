@@ -8,15 +8,6 @@
 
 <style>
   {{> assets/sliders.css}}
-  .tsne-group {
-    width: 100%;
-    overflow: hidden;
-  }
-  .original {
-    width: calc(100% / 6);
-    float: left;
-    position: relative;
-  }
   h1 {
     text-align: center;
   }
