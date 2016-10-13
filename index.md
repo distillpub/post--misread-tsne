@@ -188,7 +188,7 @@ Don't let the hidden "magic" scare you away from the whole technique, though. Th
      help from Shan Carter.
      Daniel Smilkov, James Wexler, and Chi Zeng provided many helpful comments.
      We also thank Andrej Karpathy for creating the
-     <a href="https://github.com/karpathy/tsnejs">tsnjs</a> library used in the interactive diagrams.</p>
+     <a href="https://github.com/karpathy/tsnejs">tsnejs</a> library used in the interactive diagrams.</p>
   <p>This work was made possible by the support of the <a href="https://research.google.com/teams/brain/">Google Brain</a> team.
 
   <h3 id="citation">Errors, Reuse, and Citation</h3>
