@@ -245,6 +245,11 @@
     setTrayRunning(!GLOBALS.running);
   });
 
+  var trayRestart = d3.select("#tray-controls .restart")
+    .on("click", function() {
+      runTrayState();
+    })
+
   d3.select(window).on("scroll.tray", function() {
     if(GLOBALS.trayOpen) {
       if(scrollY < 1000) {
