@@ -249,7 +249,7 @@ function subsetClustersData(n, dim) {
 
 // Data in a rough simplex.
 function simplexData(n, noise) {
-  noise = noise || 0;
+  noise = noise || 0.5;
   var points = [];
   for (var i = 0; i < n; i++) {
     var p = [];
@@ -642,7 +642,7 @@ var demos = [
     options: [
       {
         name: 'Number Of Points',
-        min: 2, max: 100, start: 6,
+        min: 2, max: 100, start: 50,
       }
     ],
     generator: simplexData
