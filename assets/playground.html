@@ -5,16 +5,11 @@
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     /*border-bottom: 1px solid rgba(0, 0, 0, 0.1);*/
     margin-top: 36px;
-    padding: 36px 12px 0 6px;
+    padding: 36px 0 0 0;
     background: #fcfcfc;
     z-index: 1000;
   }
-  @media(min-width: 1024px) {
-    #playground {
-      padding-left: 0;
-      padding-right: 0;
-    }
-  }
+
   #playground * {
     box-sizing: border-box;
   }
@@ -107,7 +102,6 @@
   /* Data Details */
   #data-details {
     position: relative;
-    margin-left: 18px;
   }
 
   @media(min-width: 768px) {
@@ -127,8 +121,8 @@
 
   @media(min-width: 768px) {
     #data-details #data-controls {
-      width: 55%;
-      margin-right: 5%;
+      width: 50%;
+      margin-right: 10%;
       float: left;
     }
   }
@@ -146,13 +140,14 @@
     color: white;
     width: 25%;
     margin-right: 5%;
-    padding-top: calc(25% - 3px);
+    padding-top: 25%;
+    padding-bottom: 0;
     border: none;
     float: left;
     position: relative;
   }
   #play-controls i {
-    display: inline-block;
+    display: block;
     position: absolute;
     top: 50%;
     left: 0;
@@ -230,6 +225,24 @@
     margin-left: 4px;
   }
 
+  #data-details #share {
+    margin-top: 8px;
+    display: block;
+    color: rgba(0, 0, 0, 0.4);
+    text-decoration: none;
+    font-size: 12px;
+  }
+
+  #data-details #share:hover {
+    text-decoration: underline;
+  }
+
+  #data-details #share i {
+    line-height: 0px;
+    position: relative;
+    top: 7px;
+  }
+
 </style>
 <div id="playground">
 
@@ -242,13 +255,8 @@
   <div id="data-details">
     <div id="data-controls">
       <div id="play-controls">
-        <button id="play-pause">
-          <i class="material-icons">play_arrow</i>
-          <i class="material-icons">pause</i>
-        </button>
-        <button id="restart">
-          <i class="material-icons">refresh</i>
-        </button>
+        <button id="play-pause"><i class="material-icons">play_arrow</i><i class="material-icons">pause</i></button>
+        <button id="restart"><i class="material-icons">refresh</i></button>
         <div id="steps-display">
           Step<br><span id="step"></span>
         </div>
@@ -256,10 +264,10 @@
       <div id="data-options"></div>
       <div id="tsne-options"></div>
     </div>
-    <div id="data-description"></div>
-    <br/>
-    <br/>
-    <a id="share" style="display:none;">Link to this simulation</a>
+    <div id="data-description">
+      <span></span>
+      <a id="share" style="display:none;"><i class="material-icons">link</i> Share this view</a>
+    </div>
   </div>
 
 

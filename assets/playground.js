@@ -178,7 +178,7 @@ function main() {
     GLOBALS.state.demo = index;
     demo = demos[index];
     // Show description of demo data.
-    document.getElementById('data-description').innerHTML = demo.description;
+    document.querySelector('#data-description span').textContent = demo.description;
     // Create UI for the demo data options.
     var dataOptionsArea = document.getElementById('data-options');
     dataOptionsArea.innerHTML = '';
