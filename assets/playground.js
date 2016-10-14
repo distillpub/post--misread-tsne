@@ -139,7 +139,6 @@ function main() {
       GLOBALS.playgroundDemo.destroy();
       delete GLOBALS.playgroundDemo;
     }
-    console.log("GO", points, GLOBALS.state)
     //runPlayground(points, canvas, GLOBALS.state, function(step) {
     GLOBALS.playgroundDemo = demoMaker(points, canvas, GLOBALS.state, function(step) {
       d3.select("#step").text(format(step));
@@ -178,7 +177,8 @@ function main() {
     GLOBALS.state.demo = index;
     demo = demos[index];
     // Show description of demo data.
-    document.querySelector('#data-description span').textContent = demo.description;
+    //document.querySelector('#data-description span').textContent = demo.description;
+    d3.select("#data-description span").text(demo.description)
     // Create UI for the demo data options.
     var dataOptionsArea = document.getElementById('data-options');
     dataOptionsArea.innerHTML = '';
