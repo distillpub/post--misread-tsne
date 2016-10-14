@@ -85,9 +85,16 @@
   opacity: 0;
   transition: opacity 0.3s;
   line-height: 0;
-  width: 100%;
-  padding: 50% 0;
+  width: 150px;
+  padding: 75px 0;
   text-align: center;
+}
+
+@media(min-width: 640px) {
+  .runner i {
+    width: 100%;
+    padding: 50% 0;
+  }
 }
 
 .runner.selected .image::after {
