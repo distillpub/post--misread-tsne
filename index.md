@@ -33,7 +33,7 @@ section {
 
 <div class="w-page intro">
   <h1>{{ distill.title }}</h1>
-  <h2>{{ distill.description }}</h2>
+  <h2>Although extremely useful for visualizing high-dimensional data, t-SNE plots can sometimes be mysterious or misleading. By exploring how it behaves in simple cases, we can learn to use it more effectively.</h2>
 </div>
 
 <div class="w-page">
