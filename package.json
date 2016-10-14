@@ -3,11 +3,11 @@
   "name": "misread-tsne",
   "distill": {
     "title": "How to Use t-SNE Effectively",
-    "description": "Although extremely useful for visualizing high-dimensional data, t-SNE plots can sometimes be mysterious or misleading. By exploring how it behaves in simple cases, we can learn to use it more effectively.",
+    "description": "Although extremely useful for visualizing high-dimensional data, t-SNE plots can sometimes be mysterious or misleading.",
     "url": "http://distill.pub/2016/misread-tsne/",
-    "github": "https://github.com/distillpub/post--augmented-rnns",
-    "firstPublished": "Thu Sep 08 2016 10:27:05 GMT-0700 (PDT)",
-    "lastPublished": "Thu Sep 08 2016 10:27:05 GMT-0700 (PDT)",
+    "github": "https://github.com/distillpub/post--misread-tsne",
+    "firstPublished": "Thu Oct 13 2016 20:28:09 GMT-0700 (PDT)",
+    "lastPublished": "Thu Oct 13 2016 20:28:09 GMT-0700 (PDT)",
     "authors": [
       {
         "firstName": "Martin",

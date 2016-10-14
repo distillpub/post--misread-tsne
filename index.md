@@ -33,7 +33,7 @@ section {
 
 <div class="w-page intro">
   <h1>{{ distill.title }}</h1>
-  <h2>{{ distill.description }}</h2>
+  <h2>Although extremely useful for visualizing high-dimensional data, t-SNE plots can sometimes be mysterious or misleading. By exploring how it behaves in simple cases, we can learn to use it more effectively.</h2>
 </div>
 
 <div class="w-page">
@@ -201,7 +201,7 @@ Don't let the hidden "magic" scare you away from the whole technique, though. Th
 
   <h3 id="citation">Errors, Reuse, and Citation</h3>
   <p>If you see mistakes or want to suggest changes, please submit a pull request on <a href="{{{distill.github}}}">github</a>.
-  <p>Diagrams and text are licensed under Creative Commons Attribution <a href="https://creativecommons.org/licenses/by/2.0/">CC-BY 2.0</a>, unless noted otherwise, with the source available on available on <a href="{{{distill.github}}}">github</a>. The figures that have been reused from other sources don't fall under this license and can be recognized by a note in their caption: "Figure from …".
+  <p>Diagrams and text are licensed under Creative Commons Attribution <a href="https://creativecommons.org/licenses/by/2.0/">CC-BY 2.0</a>, unless noted otherwise, with the source available on available on <a href="{{{distill.github}}}">github</a>.
   <p>For attribution in academic contexts, please cite this work as
   <pre class="citation">{{distill.concatenatedAuthors}} "{{distill.title}}", Distill, {{distill.firstPublishedYear}}.</pre>
   <p>BibTeX citation
