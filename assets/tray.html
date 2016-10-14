@@ -1,35 +1,41 @@
 <style>
+  #tray-container {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    top: -390px;
+    transition: top 0.3s;
+  }
   #tray {
+    position: relative;
     border: 2px solid steelblue;
     background: white;
     padding: 24px 24px 60px 24px;
     box-shadow: 0px 2px 24px rgba(0, 0, 0, 0.2);
-    position: fixed;
-    transition: top 0.3s;
-    width: 100%;
     box-sizing: border-box;
-    left: 0;
-    height: 340px;
-    top: -370px;
+    margin: 0 auto;
+    height: 380px;
     display: flex;
     justify-content: center;
-    width: 700px;
-    left: calc(50% - 350px);
-    z-index: 100;
+    max-width: 700px;
     border-radius: 4px;
   }
 
-  #tray.modal {
+  #tray-container.modal {
     top: -4px;
   }
 
   #tray-content {
-    width: 300px;
+    width: 55%;
     height: 100%;
     font-size: 12px;
+    position: relative;
+    top: -12px;
   }
   #tray-content canvas {
-    height: 100%;
+    width: 100%;
   }
 
   #tray-options {
@@ -37,7 +43,7 @@
     font-size: 13px;
     line-height: 1.5em;
     height: 100%;
-    width: 200px;
+    width: 45%;
   }
   #tray-options #tray-controls {
     margin-bottom: 24px;
@@ -68,6 +74,11 @@
   #tray-steps-display {
     text-align: center;
     width: 48px;
+    font-size: 15px;
+  }
+  #tray input {
+    margin-bottom: 12px;
+    margin-left: -2px;
   }
   #tray-data-sliders {
   }
@@ -92,28 +103,30 @@
     opacity: 1;
   }
 </style>
-<div id="tray">
-  <div id="tray-content">
-    <canvas width=400 height=400></canvas>
-  </div>
-
-  <div id="tray-options">
-    <div id="tray-controls">
-      <button class="play-pause">
-        <i class="material-icons">play_arrow</i>
-        <i class="material-icons">pause</i>
-      </button>
-      <button class="restart">
-        <i class="material-icons">refresh</i>
-      </button>
-      <div id="tray-steps-display">
-        Step: <br> <span class="step"></span>
-      </div>
+<div id="tray-container">
+  <div id="tray">
+    <div id="tray-content">
+      <canvas width=400 height=400></canvas>
     </div>
-    <div id="tray-data-sliders"></div>
-    <div id="tray-tsne-sliders"></div>
+
+    <div id="tray-options">
+      <div id="tray-controls">
+        <button class="play-pause">
+          <i class="material-icons">play_arrow</i>
+          <i class="material-icons">pause</i>
+        </button>
+        <button class="restart">
+          <i class="material-icons">refresh</i>
+        </button>
+        <div id="tray-steps-display">
+          Step: <br> <span class="step"></span>
+        </div>
+      </div>
+      <div id="tray-data-sliders"></div>
+      <div id="tray-tsne-sliders"></div>
+    </div>
+    <button id="tray-close"><i class="material-icons">expand_less</i></button>
   </div>
-  <button id="tray-close"><i class="material-icons">expand_less</i></button>
 </div>
 <script>
 // This depends on playground.js having setup the GLOBAL object
@@ -204,21 +217,21 @@
     GLOBALS.trayState = state;
     runTrayState()
     updateTraySliders()
-    d3.select("#tray").classed("modal", true)
+    d3.select("#tray-container").classed("modal", true)
     GLOBALS.trayOpen = true;
   }
 
   d3.select("body").on("keydown", function() {
     if(d3.event.keyCode === 27) {
       setTrayRunning(false)
-      d3.select("#tray").classed("modal", false);
+      d3.select("#tray-container").classed("modal", false);
       d3.selectAll(".runner").classed("selected", false);
     }
   })
   d3.select("#tray-close").on("click", function() {
     setTrayRunning(false);
     GLOBALS.trayOpen = false;
-    d3.select("#tray").classed("modal", false)
+    d3.select("#tray-container").classed("modal", false)
     d3.selectAll(".runner").classed("selected", false);
   })
 
@@ -255,7 +268,7 @@
       if(scrollY < 1000) {
         setTrayRunning(false);
         GLOBALS.trayOpen = false;
-        d3.select("#tray").classed("modal", false);
+        d3.select("#tray-container").classed("modal", false);
         d3.selectAll(".runner").classed("selected", false);
       }
     }
