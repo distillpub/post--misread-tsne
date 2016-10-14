@@ -642,7 +642,7 @@ var demos = [
     options: [
       {
         name: 'Number Of Points',
-        min: 2, max: 100, start: 20,
+        min: 2, max: 100, start: 6,
       }
     ],
     generator: simplexData

@@ -139,10 +139,11 @@ function main() {
       GLOBALS.playgroundDemo.destroy();
       delete GLOBALS.playgroundDemo;
     }
+    console.log("GO", points, GLOBALS.state)
     //runPlayground(points, canvas, GLOBALS.state, function(step) {
     GLOBALS.playgroundDemo = demoMaker(points, canvas, GLOBALS.state, function(step) {
       d3.select("#step").text(format(step));
-      if(step > GLOBALS.stepLimit && !GLOBALS.unpausedBefore) {
+      if(step >= GLOBALS.stepLimit && !GLOBALS.unpausedBefore) {
         setRunning(false)
       }
     })
