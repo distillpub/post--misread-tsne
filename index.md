@@ -61,7 +61,7 @@ Let's start with the "hello world" of t-SNE: a data set of two widely separated 
 <section class="w-page tsne-group" id="figures-01" data-id="01">
 </section>
 
-With perplexity values in the range (5 - 50) suggested by van der Maaten & Hinton, the diagrams do show these clusters. Outside that range, things get a little weird. With perplexity 2, local variations dominate; at perplexity 100, the clusters merge into one blob.
+With perplexity values in the range (5 - 50) suggested by van der Maaten & Hinton, the diagrams do show these clusters, although with very different shapes. Outside that range, things get a little weird. With perplexity 2, local variations dominate. The image for perplexity 100, with merged clusters, illustrates a pitfall: for the algorithm to operate property, the perplexity really should be smaller than the number of points. Implementations can give unexpected behavior otherwise.
 
 Each of the plots above was made with 5,000 iterations with a learning rate (often called "epsilon") of 10, and had reached a point of stability by step 5,000. How much of a difference do those values make? In our experience, the most important thing is to iterate until reaching a stable configuration.
 
@@ -134,7 +134,7 @@ It's rare for data to be distributed in a perfectly symmetric way. Let's take a 
 <section class="w-page tsne-group" id="figures-07" data-id="07">
 </section>
 
-For high enough perplexity values, the elongated shapes are easy to read. On the other hand, at low perplexity, local effects and meaningless "clumping" take center stage. More extreme shapes also come through, but again only at the right perplexity. For example, here are two clusters of 50 points each in 2D, arranged in parallel lines with a bit of noise.
+For high enough perplexity values, the elongated shapes are easy to read. On the other hand, at low perplexity, local effects and meaningless "clumping" take center stage. More extreme shapes also come through, but again only at the right perplexity. For example, here are two clusters of 75 points each in 2D, arranged in parallel lines with a bit of noise.
 
 <section class="w-page tsne-group" id="figures-08" data-id="08">
 </section>
@@ -148,7 +148,7 @@ Even in the best cases, though, there's a subtle distortion: the lines are sligh
 ## 6. For topology, you may need more than one plot
 
 Sometimes you can read topological information off a t-SNE plot, but that typically requires views at multiple perplexities.
-One of the simplest topological properties is containment. The plots below show two groups of 50 points in 50 dimensional space. Both are sampled from symmetric Gaussian distributions centered at the origin, but one is 50 times more tightly dispersed than the other. The "small" distribution is in effect contained in the large one.
+One of the simplest topological properties is containment. The plots below show two groups of 75 points in 50 dimensional space. Both are sampled from symmetric Gaussian distributions centered at the origin, but one is 50 times more tightly dispersed than the other. The "small" distribution is in effect contained in the large one.
 
 <section class="w-page tsne-group" id="figures-09" data-id="09">
 </section>
@@ -197,7 +197,10 @@ Don't let the hidden "magic" scare you away from the whole technique, though. Th
      Daniel Smilkov, James Wexler, and Chi Zeng provided many helpful comments.
      We also thank Andrej Karpathy for creating the
      <a href="https://github.com/karpathy/tsnejs">tsnejs</a> library used in the interactive diagrams.</p>
-  <p>This work was made possible by the support of the <a href="https://research.google.com/teams/brain/">Google Brain</a> team.
+  <p>This work was made possible by the support of the <a href="https://research.google.com/teams/brain/">Google Brain</a> team.</p>
+
+
+  <p>Edited on Oct. 18, 2016 to describe and correct issues when perplexity is defined to be larger than the number of points. Thanks to Laurens van der Maaten for pointing this out.</p>
 
   <h3 id="citation">Errors, Reuse, and Citation</h3>
   <p>If you see mistakes or want to suggest changes, please submit a pull request on <a href="{{{distill.github}}}">github</a>.

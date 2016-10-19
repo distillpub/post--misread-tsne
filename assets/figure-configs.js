@@ -27,7 +27,7 @@ var figures = [
   },
   {
     id: "03",
-    params: [50, 2],
+    params: [75, 2],
     dataset: 'Two Different-Sized Clusters',
     no3d: true,
     examples: [
@@ -92,7 +92,7 @@ var figures = [
   },
   {
     id: "08",
-    params: [50, 2],
+    params: [75, 2],
     dataset: 'Two Long Linear Clusters',
     no3d: true,
     examples: [
@@ -105,7 +105,7 @@ var figures = [
   },
   {
     id: "09",
-    params: [50, 50],
+    params: [75, 50],
     dataset: 'Cluster In Cluster',
     no3d: true,
     examples: [
@@ -131,7 +131,7 @@ var figures = [
   },
   {
     id: "11",
-    params: [100],
+    params: [150],
     dataset: 'Trefoil Knot',
     no3d: false,
     examples: [
