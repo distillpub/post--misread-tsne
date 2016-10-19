@@ -153,7 +153,7 @@ One of the simplest topological properties is containment. The plots below show 
 <section class="w-page tsne-group" id="figures-09" data-id="09">
 </section>
 
-The perplexity 30 view shows the basic topology correctly, but again t-SNE greatly exaggerates the size of the smaller group of points. At perplexity 50, there's a new phenomenon: the outer group becomes a circle, as the plot tries to depict the fact that all its are about the same distance from the inner group. If you looked at this image alone, it would be easy to misread these outer points as a one-dimensional structure.
+The perplexity 30 view shows the basic topology correctly, but again t-SNE greatly exaggerates the size of the smaller group of points. At perplexity 50, there's a new phenomenon: the outer group becomes a circle, as the plot tries to depict the fact that all its points are about the same distance from the inner group. If you looked at this image alone, it would be easy to misread these outer points as a one-dimensional structure.
 
 What about more complicated types of topology? This may be a subject dearer to mathematicians than to practical data analysts, but interesting low-dimensional structures are occasionally found in the wild.
 
@@ -204,7 +204,7 @@ Don't let the hidden "magic" scare you away from the whole technique, though. Th
 
   <h3 id="citation">Errors, Reuse, and Citation</h3>
   <p>If you see mistakes or want to suggest changes, please submit a pull request on <a href="{{{distill.github}}}">github</a>.
-  <p>Diagrams and text are licensed under Creative Commons Attribution <a href="https://creativecommons.org/licenses/by/2.0/">CC-BY 2.0</a>, unless noted otherwise, with the source available on available on <a href="{{{distill.github}}}">github</a>.
+  <p>Diagrams and text are licensed under Creative Commons Attribution <a href="https://creativecommons.org/licenses/by/2.0/">CC-BY 2.0</a>, unless noted otherwise, with the source available on <a href="{{{distill.github}}}">github</a>.
   <p>For attribution in academic contexts, please cite this work as
   <pre class="citation">{{distill.concatenatedAuthors}} "{{distill.title}}", Distill, {{distill.firstPublishedYear}}.</pre>
   <p>BibTeX citation
