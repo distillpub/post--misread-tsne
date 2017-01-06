@@ -6,8 +6,6 @@
     "description": "Although extremely useful for visualizing high-dimensional data, t-SNE plots can sometimes be mysterious or misleading.",
     "url": "http://distill.pub/2016/misread-tsne/",
     "github": "https://github.com/distillpub/post--misread-tsne",
-    "firstPublished": "Thu Oct 13 2016 20:28:09 GMT-0700 (PDT)",
-    "lastPublished": "Thu Oct 13 2016 20:28:09 GMT-0700 (PDT)",
     "authors": [
       {
         "firstName": "Martin",
