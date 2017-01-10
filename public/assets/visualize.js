@@ -18,7 +18,7 @@ function visualize(points, canvas, message, no3d) {
   var width = canvas.width;
   var height = canvas.height;
   var g = canvas.getContext('2d');
-  g.fillStyle = width > 500 ? '#fcfcfc' : 'white';
+  g.fillStyle = 'white';
   g.fillRect(0, 0, width, height);
   var xExtent = d3.extent(points, function(p) {return p.coords[0]});
   var yExtent = d3.extent(points, function(p) {return p.coords[1]});

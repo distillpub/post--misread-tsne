@@ -1,5 +1,5 @@
-<!doctype html>
-<meta charset="utf-8">
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <script type="text/front-matter">
   title: How to Use t-SNE Effectively
   description: Although extremely useful for visualizing high-dimensional data, t-SNE plots can sometimes be mysterious or misleading.
@@ -132,15 +132,13 @@ input[type=range]:focus::-ms-fill-upper {
 }
 @media(min-width: 1024px) {
   .intro h1 {
-    text-align: center;
   }
   .intro h2 {
-    text-align: center;
     font-size: 21px;
     max-width: 760px;
-    margin: 0 auto;
     font-weight: 300;
     line-height: 1.5em;
+    border-bottom: none!important;
   }
 }
 section {
@@ -148,163 +146,934 @@ section {
 }
 </style>
 
-<dt-include src="assets/tray.html"></dt-include>
+</head><body><dt-include src="assets/tray.html"><style>
+  #tray-container {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    top: -410px;
+    transition: top 0.3s;
+  }
+  #tray {
+    position: relative;
+    border: 2px solid steelblue;
+    background: white;
+    padding: 24px 24px 60px 24px;
+    box-shadow: 0px 2px 24px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    margin: 0 auto;
+    height: 380px;
+    display: flex;
+    justify-content: center;
+    max-width: 700px;
+    border-radius: 4px;
+  }
 
-<dt-article markdown>
-  <div class="w-page intro">
+  #tray-container.modal {
+    top: -4px;
+  }
+
+  #tray-content {
+    width: 55%;
+    height: 100%;
+    font-size: 12px;
+    position: relative;
+    top: -12px;
+  }
+  #tray-content canvas {
+    width: 100%;
+  }
+
+  #tray-options {
+    padding-left: 36px;
+    font-size: 13px;
+    line-height: 1.5em;
+    height: 100%;
+    width: 45%;
+  }
+  #tray-options #tray-controls {
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+  }
+  #tray-controls button {
+    cursor: pointer;
+    outline: none;
+    border-radius: 50%;
+    background: steelblue;
+    color: white;
+    width: 48px;
+    height: 48px;
+    border: none;
+    margin-right: 12px;
+  }
+  #tray-controls .play-pause i {
+    display: none;
+    font-size: 30px;
+  }
+  #tray-controls .play-pause.paused i:nth-child(1) {
+    display: block;
+  }
+  #tray-controls .play-pause.playing i:nth-child(2) {
+    display: block;
+  }
+  #tray-steps-display {
+    text-align: center;
+    width: 48px;
+    font-size: 15px;
+  }
+  #tray input {
+    margin-bottom: 12px;
+    margin-left: -2px;
+  }
+  #tray-data-sliders {
+  }
+  #tray-tsne-sliders {
+  }
+  #tray-close {
+    cursor: pointer;
+    outline: none;
+    background: white;
+    border: none;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 6px 0;
+    background: #f0f4f5;
+    opacity: 0.6;
+    color: steelblue;
+    left: 0;
+  }
+  #tray-close:hover {
+    opacity: 1;
+  }
+</style>
+<div id="tray-container">
+  <div id="tray">
+    <div id="tray-content">
+      <canvas width="400" height="400"></canvas>
+    </div>
+
+    <div id="tray-options">
+      <div id="tray-controls">
+        <button class="play-pause">
+          <i class="material-icons">play_arrow</i>
+          <i class="material-icons">pause</i>
+        </button>
+        <button class="restart">
+          <i class="material-icons">refresh</i>
+        </button>
+        <div id="tray-steps-display">
+          Step: <br> <span class="step"></span>
+        </div>
+      </div>
+      <div id="tray-data-sliders"></div>
+      <div id="tray-tsne-sliders"></div>
+    </div>
+    <button id="tray-close"><i class="material-icons">expand_less</i></button>
+  </div>
+</div>
+<script>
+// This depends on playground.js having setup the GLOBAL object
+  function runTrayState() {
+    // Set up t-SNE and start it running.
+    var state = GLOBALS.trayState;
+    var points = state.demo.generator.apply(null, state.demoParams);
+    var canvas = d3.select("#tray-content canvas").node()
+
+    // if there was already a playground demo going, lets destroy it and make a new one
+    if(GLOBALS.trayDemo) {
+      GLOBALS.trayDemo.destroy();
+      delete GLOBALS.trayDemo;
+    }
+    GLOBALS.trayDemo = demoMaker(points, canvas, state, function(step) {
+      d3.select("#tray-controls .step").text(step);
+      if(step >= state.stepLimit && !GLOBALS.trayUnpausedBefore) {
+        setTrayRunning(false)
+      }
+    })
+
+    GLOBALS.trayUnpausedBefore = false;
+    setTrayRunning(true);
+  }
+
+  function updateTraySliders() {
+    // we regenerate all the sliders from scratch
+    // we modify the global tray state when a slider is modified
+    var state = GLOBALS.trayState;
+    var dataSliders = d3.select('#tray-data-sliders');
+    dataSliders.html('');
+    state.demo.options.map(function(option, i) {
+      var value = state.demoParams[i];
+      var slider = makeTraySlider(dataSliders.node(), option.name,
+        option.min, option.max, value, function() {
+          // when this one updates we change the appropriate state
+          GLOBALS.trayState.demoParams[i] = +slider.value
+          runTrayState();
+        });
+    });
+
+    var tsneSliders = d3.select('#tray-tsne-sliders');
+    tsneSliders.html('');
+    var perpSlider = makeTraySlider(tsneSliders.node(), "Perplexity",
+        1, 100, state.perplexity, function() {
+          GLOBALS.trayState.perplexity = perpSlider.value
+          runTrayState();
+        });
+
+    var epsSlider = makeTraySlider(tsneSliders.node(), "Epsilon",
+        1, 20, state.epsilon, function() {
+          GLOBALS.trayState.epsilon = epsSlider.value
+          runTrayState();
+        });
+
+  }
+
+  function makeTraySlider(container, name, min, max, start, changeCallback) {
+    var dis = d3.select(container)
+    dis.append("span").classed("slider-label-" + name, true)
+      .text(name + ' ')
+    var value = dis.append("span").classed("slider-value-" + name, true)
+      .text(start)
+
+    var slider = dis.append("input")
+      .attr("type", "range")
+      .attr("min", min)
+      .attr("max", max)
+      .attr("value", start)
+      .on("change", changeCallback)
+      .on("input", function() {
+        value.text(slider.node().value);
+      })
+    return slider.node();
+  }
+
+  /* Activate the tray */
+  function updateStateFromFigure(figure, example, el) {
+    var y = el.getBoundingClientRect().top;
+    var demo = demosByName[figure.dataset];
+    var state = {
+      demo: demos[demo.index],
+      demoParams: figure.params.map(function(d) { return d}),
+      perplexity: example.perplexity,
+      epsilon: example.epsilon,
+      stepLimit: example.step
+    }
+    GLOBALS.trayState = state;
+    runTrayState()
+    updateTraySliders()
+    d3.select("#tray-container").classed("modal", true)
+    GLOBALS.trayOpen = true;
+  }
+
+  d3.select("body").on("keydown", function() {
+    if(d3.event.keyCode === 27) {
+      setTrayRunning(false)
+      d3.select("#tray-container").classed("modal", false);
+      d3.selectAll(".runner").classed("selected", false);
+    }
+  })
+  d3.select("#tray-close").on("click", function() {
+    setTrayRunning(false);
+    GLOBALS.trayOpen = false;
+    d3.select("#tray-container").classed("modal", false)
+    d3.selectAll(".runner").classed("selected", false);
+  })
+
+  /* Tray Controls */
+  var trayPlay = d3.select("#tray-controls .play-pause")
+  function setTrayRunning(r) {
+    GLOBALS.running = r;
+    if (GLOBALS.running) {
+      GLOBALS.trayDemo.unpause();
+      trayPlay
+        .classed("playing", true)
+        .classed("paused", false);
+    } else {
+      GLOBALS.trayDemo.pause();
+      trayPlay
+        .classed("playing", false)
+        .classed("paused", true);
+    }
+  }
+
+  // Hook up play / pause / restart buttons.
+  trayPlay.on("click", function() {
+    GLOBALS.trayUnpausedBefore = true;
+    setTrayRunning(!GLOBALS.running);
+  });
+
+  var trayRestart = d3.select("#tray-controls .restart")
+    .on("click", function() {
+      runTrayState();
+    })
+
+  d3.select(window).on("scroll.tray", function() {
+    if(GLOBALS.trayOpen) {
+      if(scrollY < 1000) {
+        setTrayRunning(false);
+        GLOBALS.trayOpen = false;
+        d3.select("#tray-container").classed("modal", false);
+        d3.selectAll(".runner").classed("selected", false);
+      }
+    }
+  });
+  /* Tray sliders */
+</script>
+</dt-include>
+
+<dt-article>
+  <div class="l-page intro">
     <h1>How to Use t-SNE Effectively</h1>
     <h2>Although extremely useful for visualizing high-dimensional data, t-SNE plots can sometimes be mysterious or misleading. By exploring how it behaves in simple cases, we can learn to use it more effectively.</h2>
   </div>
-  <div class="w-page">
-    <dt-include src="assets/playground.html"></dt-include>
+  <div class="l-page">
+    <dt-include src="assets/playground.html"><style>
+  #playground {
+    overflow: hidden;
+    font-family: 'Open Sans', sans-serif;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    /*border-bottom: 1px solid rgba(0, 0, 0, 0.1);*/
+    margin-top: 36px;
+    padding: 36px 0 0 0;
+    /*background: #fcfcfc;*/
+    z-index: 1000;
+  }
+
+  #playground * {
+    box-sizing: border-box;
+  }
+
+  #playground.modal {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    top: 50px;
+  }
+
+  /* Playground Canvas */
+  #playground-canvas {
+    float: left;
+    width: 55%;
+  }
+
+  #playground-canvas canvas {
+    width: 100%;
+  }
+
+  /* Data Menu */
+  #data-menu {
+    /*float: left;*/
+    /*width: 25%*/
+    width: 40%;
+    float: left;
+    margin-bottom: 24px;
+    overflow: hidden;
+    margin-left: 5%;
+  }
+  #data-menu .demo-data {
+    cursor: pointer;
+    position: relative;
+    font-size: 10px;
+    line-height: 1.2em;
+    box-sizing: border-box;
+    float: left;
+    margin: 2px;
+    padding: 4px;
+    width: calc(33% - 4px);
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.08);
+  }
+  @media(min-width: 480px) {
+    #data-menu .demo-data {
+      width: calc(25% - 8px);
+      padding: 8px;
+      margin: 4px;
+    }
+  }
+  @media(min-width: 768px) {
+    #data-menu .demo-data {
+      width: calc(16.5% - 8px);
+      padding: 8px;
+      margin: 4px;
+    }
+  }
+  #data-menu .demo-data:hover {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+
+  }
+  #data-menu .demo-data.selected::after {
+    content: "";
+    border: 2px solid rgba(70, 130, 180, 0.8);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    border-radius: 4px;
+  }
+  #data-menu .demo-data span {
+    display: none;
+  }
+  #data-menu .demo-data:hover canvas {
+    opacity: 1;
+  }
+  #data-menu .demo-data canvas {
+    width: 100%;
+    opacity: 0.3;
+  }
+  #data-menu .demo-data.selected canvas {
+    opacity: 1;
+  }
+
+  /* Data Details */
+  #data-details {
+    position: relative;
+  }
+
+  @media(min-width: 768px) {
+    #data-details {
+      width: 40%;
+      float: right;
+    }
+  }
+
+  #data-details #data-controls {
+    width: 40%;
+    float: right;
+    position: relative;
+    overflow: hidden;
+    font-size: 13px;
+  }
+
+  @media(min-width: 768px) {
+    #data-details #data-controls {
+      width: 50%;
+      margin-right: 10%;
+      float: left;
+    }
+  }
+
+  #data-details #play-controls {
+    margin-bottom: 18px;
+    overflow: hidden;
+    position: relative;
+  }
+  #data-details #play-controls button {
+    cursor: pointer;
+    outline: none;
+    border-radius: 50%;
+    background: steelblue;
+    color: white;
+    width: 25%;
+    margin-right: 5%;
+    padding-top: 25%;
+    padding-bottom: 0;
+    border: none;
+    float: left;
+    position: relative;
+  }
+  #play-controls i {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 36px;
+    font-size: 24px;
+    line-height: 0;
+  }
+  @media(min-width: 768px) {
+    #play-controls i {
+      font-size: 30px;
+    }
+  }
+  #play-controls #play-pause i {
+    display: none;
+    position: absolute;
+  }
+  #play-controls #play-pause.paused i:nth-child(1) {
+    display: block;
+  }
+  #play-controls #play-pause.playing i:nth-child(2) {
+    display: block;
+  }
+
+  #steps-display {
+    float: left;
+    text-align: center;
+    width: 25%;
+    line-height: 1.5em;
+    font-size: 13px;
+  }
+
+  @media(min-width: 1024px) {
+    #steps-display {
+      font-size: 16px;
+      line-height: 1.6em;
+    }
+  }
+  #data-details #data-description {
+    width: 50%;
+    margin-right: 10%;
+    float: right;
+    font-size: 14px;
+    line-height: 1.6em;
+  }
+
+  @media(min-width: 768px) {
+    #data-details #data-description {
+      width: 40%;
+      float: left;
+      margin-right: 0;
+    }
+  }
+
+  /* Options */
+  #data-details #options {
+    float: left;
+    padding-left: 36px;
+    font-size: 13px;
+    line-height: 1.5em;
+    width: 45%;
+  }
+  #data-details input {
+    display: block;
+    width: 100%;
+    margin: 8px 0 16px 0;
+  }
+
+  #options #data-options {
+    width: 45%;
+    margin-left: 4px;
+  }
+  #options #tsne-options {
+    width: 45%;
+    margin-left: 4px;
+  }
+
+  #data-details #share {
+    margin-top: 8px;
+    display: block;
+    color: rgba(0, 0, 0, 0.4);
+    text-decoration: none;
+    font-size: 12px;
+  }
+
+  #data-details #share:hover {
+    text-decoration: underline;
+  }
+
+  #data-details #share i {
+    line-height: 0px;
+    position: relative;
+    top: 7px;
+  }
+
+</style>
+<div id="playground">
+
+  <div id="playground-canvas">
+    <canvas id="output" width="600" height="600"></canvas>
+  </div>
+
+  <div id="data-menu"></div>
+
+  <div id="data-details">
+    <div id="data-controls">
+      <div id="play-controls">
+        <button id="play-pause"><i class="material-icons">play_arrow</i><i class="material-icons">pause</i></button>
+        <button id="restart"><i class="material-icons">refresh</i></button>
+        <div id="steps-display">
+          Step<br><span id="step"></span>
+        </div>
+      </div>
+      <div id="data-options"></div>
+      <div id="tsne-options"></div>
+    </div>
+    <div id="data-description">
+      <span></span>
+      <a id="share" style="display:none;"><i class="material-icons">link</i> Share this view</a>
+    </div>
+  </div>
+
+
+</div>
+<script src="assets/playground.js"></script>
+</dt-include>
   </div>
   <dt-byline></dt-byline>
+  <p>A popular method for exploring high-dimensional data is something called t-SNE, introduced by <a href="https://lvdmaaten.github.io/publications/papers/JMLR_2008.pdf">van der Maaten and Hinton in 2008</a>. The technique has become widespread in the field of machine learning, since it has an almost magical ability to create compelling two-dimensonal "maps" from data with hundreds or even thousands of dimensions.
+Although impressive, these images can be tempting to misread. The purpose of this note is to prevent some common misreadings.</p>
 
-  A popular method for exploring high-dimensional data is something called t-SNE, introduced by [van der Maaten and Hinton in 2008](https://lvdmaaten.github.io/publications/papers/JMLR_2008.pdf). The technique has become widespread in the field of machine learning, since it has an almost magical ability to create compelling two-dimensonal "maps" from data with hundreds or even thousands of dimensions.
-  Although impressive, these images can be tempting to misread. The purpose of this note is to prevent some common misreadings.
+  <p>We'll walk through a series of simple examples to illustrate what t-SNE diagrams can and cannot show. The t-SNE technique really is useful—but only if you know how to interpret it.</p>
 
-  We'll walk through a series of simple examples to illustrate what t-SNE diagrams can and cannot show. The t-SNE technique really is useful—but only if you know how to interpret it.
+  <p>Before diving in: if you haven't encountered t-SNE before, here's what you need to know about the math behind it. The goal is to take a set of points in a high-dimensional space and find a faithful representation of those points in a lower-dimensional space, typically the 2D plane. The algorithm is non-linear and adapts to the underlying data, performing different transformations on different regions. Those differences can be a major source of confusion.</p>
 
-  Before diving in: if you haven't encountered t-SNE before, here's what you need to know about the math behind it. The goal is to take a set of points in a high-dimensional space and find a faithful representation of those points in a lower-dimensional space, typically the 2D plane. The algorithm is non-linear and adapts to the underlying data, performing different transformations on different regions. Those differences can be a major source of confusion.
+  <p>A second feature of t-SNE is a tuneable parameter, "perplexity," which says (loosely) how to balance attention between local and global aspects of your data. The parameter is, in a sense, a guess about the number of close neighbors each point has. The perplexity value has a complex effect on the resulting pictures. The original paper says, <em>"The performance of SNE is fairly robust to changes in the perplexity, and typical values are between 5 and 50."</em> But the story is more nuanced than that. Getting the most from t-SNE may mean analyzing multiple plots with different perplexities.</p>
 
-  A second feature of t-SNE is a tuneable parameter, "perplexity," which says (loosely) how to balance attention between local and global aspects of your data. The parameter is, in a sense, a guess about the number of close neighbors each point has. The perplexity value has a complex effect on the resulting pictures. The original paper says, _"The performance of SNE is fairly robust to changes in the perplexity, and typical values are between 5 and 50."_ But the story is more nuanced than that. Getting the most from t-SNE may mean analyzing multiple plots with different perplexities.
+  <p>That's not the end of the complications. The t-SNE algorithm doesn't always produce similar output on successive runs, for example, and there are additional hyperparameters related to the optimization process.</p>
 
-  That's not the end of the complications. The t-SNE algorithm doesn't always produce similar output on successive runs, for example, and there are additional hyperparameters related to the optimization process.
+  <hr>
 
-  ---
+  <h2>1. Those hyperparameters really matter</h2>
 
-  ## 1. Those hyperparameters really matter
+  <p>Let's start with the "hello world" of t-SNE: a data set of two widely separated clusters. To make things as simple as possible, we'll consider clusters in a 2D plane, as shown in the lefthand diagram. (For clarity, the two clusters are color coded.) The diagrams at right show t-SNE plots for five different perplexity values.</p>
 
-  Let's start with the "hello world" of t-SNE: a data set of two widely separated clusters. To make things as simple as possible, we'll consider clusters in a 2D plane, as shown in the lefthand diagram. (For clarity, the two clusters are color coded.) The diagrams at right show t-SNE plots for five different perplexity values.
+  <p></p><section class="l-page tsne-group" id="figures-01" data-id="01">
+  </section><p></p>
 
-  <section class="w-page tsne-group" id="figures-01" data-id="01">
+  <p>With perplexity values in the range (5 - 50) suggested by van der Maaten &amp; Hinton, the diagrams do show these clusters, although with very different shapes. Outside that range, things get a little weird. With perplexity 2, local variations dominate. The image for perplexity 100, with merged clusters, illustrates a pitfall: for the algorithm to operate property, the perplexity really should be smaller than the number of points. Implementations can give unexpected behavior otherwise.</p>
+
+  <p>Each of the plots above was made with 5,000 iterations with a learning rate (often called "epsilon") of 10, and had reached a point of stability by step 5,000. How much of a difference do those values make? In our experience, the most important thing is to iterate until reaching a stable configuration.</p>
+
+  <p></p><section class="l-page tsne-group" id="figures-02" data-id="02">
+  </section><p></p>
+
+  <p>The images above show five different runs at perplexity 30. The first four were stopped before stability. After 10, 20, 60, and 120 steps you can see layouts with seeming 1-dimensional and even pointlike images of the clusters. If you see a t-SNE plot with strange "pinched" shapes, chances are the process was stopped too early. Unfortunately, there's no fixed number of steps that yields a stable result. Different data sets can require different numbers of iterations to converge.</p>
+
+  <p>Another natural question is whether different runs with the same hyperparameters produce the same results. In this simple two-cluster example, and most of the others we discuss, multiple runs give the same global shape. Certain data sets, however, yield markedly different diagrams on different runs; we'll give an example of one of these later.</p>
+
+  <p>From now on, unless otherwise stated, we'll show results from 5,000 iterations. That's generally enough for convergence in the (relatively small) examples in this essay. We'll keep showing a range of perplexities, however, since that seems to make a big difference in every case.</p>
+
+  <hr>
+
+  <h2>2. Cluster sizes in a t-SNE plot mean nothing</h2>
+
+  <p>So far, so good. But what if the two clusters have different standard deviations, and so different sizes? (By size we mean bounding box measurements, not number of points.) Below are t-SNE plots for a mixture of Gaussians in plane, where one is 10 times as dispersed as the other.</p>
+
+  <p></p><section class="l-page tsne-group" id="figures-03" data-id="03">
+  </section><p></p>
+
+  <p>Surprisingly, the two clusters look about same size in the t-SNE plots.
+  What's going on? The t-SNE algorithm adapts its notion of "distance" to regional density variations in the data set. As a result, it naturally expands dense clusters, and contracts sparse ones, evening out cluster sizes. To be clear, this is a different effect than the run-of-the-mill fact that any dimensionality reduction technique will distort distances. (After all, in this example all data was two-dimensional to begin with.) Rather, density equalization happens by design and is a predictable feature of t-SNE.</p>
+
+  <p>The bottom line, however, is that you cannot see relative sizes of clusters in a t-SNE plot.</p>
+
+  <hr>
+
+  <h2>3. Distances between clusters might not mean anything</h2>
+
+  <p>What about distances <em>between</em> clusters? The next diagrams show three Gaussians of 50 points each, one pair being 5 times as far apart as another pair.</p>
+
+  <p></p><section class="l-page tsne-group" id="figures-04" data-id="04">
+  </section><p></p>
+
+  <p>At perplexity 50, the diagram gives a good sense of the global geometry. For lower perplexity values the clusters look equidistant. When the perplexity is 100, we see the global geometry fine, but one of the cluster appears, falsely, much smaller than the others.
+  Since perplexity 50 gave us a good picture in this example, can we can always set perplexity to 50 if we want to see global geometry?</p>
+
+  <p>Sadly, no. If we add more points to each cluster, the perplexity has to increase to compensate. Here are the t-SNE diagrams for three Gaussian clusters with 200 points each, instead of 50. Now none of the trial perplexity values gives a good result.</p>
+
+  <p></p><section class="l-page tsne-group" id="figures-05" data-id="05">
+  </section><p></p>
+
+  <p>It's bad news that seeing global geometry requires fine-tuning perplexity. Real-world data would probably have multiple clusters with different numbers of elements. There may not be one perplexity value that will capture distances across all clusters—and sadly perplexity is a global parameter. Fixing this problem might be an interesting area for future research.</p>
+
+  <p>The basic message is that distances between well-separated clusters in a t-SNE plot may mean nothing.</p>
+
+  <hr>
+
+  <h2>4. Random noise doesn't always look random.</h2>
+
+  <p>A classic pitfall is thinking you see patterns in what is really just random data. Recognizing noise when you see it is a critical skill, but it takes time to build up the right intuitions. A tricky thing about t-SNE is that it throws a lot of existing intuition out the window.
+  The next diagrams show genuinely random data, 500 points drawn from a unit Gaussian distribution in 100 dimensions. The left image is a projection onto the first two coordinates.</p>
+
+  <p></p><section class="l-page tsne-group" id="figures-06" data-id="06">
+  </section><p></p>
+
+  <p>The plot with perplexity 2 seems to show dramatic clusters. If you were tuning perplexity to bring out structure in the data, you might think you'd hit the jackpot.</p>
+
+  <p>Of course, since we know the cloud of points was generated randomly, it has no statistically interesting clusters: those "clumps" aren't meaningful. If you look back at previous examples, low perplexity values often lead to this kind of distribution. Recognizing these clumps as random noise is an important part of reading t-SNE plots.</p>
+
+  <p>There's something else interesting, though, which may be a win for t-SNE. At first the perplexity 30 plot doesn't look like a Gaussian distribution at all: there's only a slight density difference across different regions of the cloud, and the points seem suspiciously evenly distributed. In fact, these features are saying useful things about high-dimensional normal distributions, which are very close to uniform distributions on a sphere: evenly distributed, with roughly equal spaces between points. Seen in this light, the t-SNE plot is more accurate than any linear projection could be.</p>
+
+  <hr>
+
+  <h2>5. You can see some shapes, sometimes</h2>
+
+  <p>It's rare for data to be distributed in a perfectly symmetric way. Let's take a look at an axis-aligned Gaussian distribution in 50 dimensions, where the standard deviation in coordinate i is 1/i. That is, we're looking at a long-ish ellipsoidal cloud of points.</p>
+
+  <p></p><section class="l-page tsne-group" id="figures-07" data-id="07">
+  </section><p></p>
+
+  <p>For high enough perplexity values, the elongated shapes are easy to read. On the other hand, at low perplexity, local effects and meaningless "clumping" take center stage. More extreme shapes also come through, but again only at the right perplexity. For example, here are two clusters of 75 points each in 2D, arranged in parallel lines with a bit of noise.</p>
+
+  <p></p><section class="l-page tsne-group" id="figures-08" data-id="08">
+  </section><p></p>
+
+  <p>For a certain range of perplexity the long clusters look close to correct, which is reassuring.</p>
+
+  <p>Even in the best cases, though, there's a subtle distortion: the lines are slightly curved outwards in the t-SNE diagram. The reason is that, as usual, t-SNE tends to expand denser regions of data. Since the middles of the clusters have less empty space around them than the ends, the algorithm magnifies them.</p>
+
+  <hr>
+
+  <h2>6. For topology, you may need more than one plot</h2>
+
+  <p>Sometimes you can read topological information off a t-SNE plot, but that typically requires views at multiple perplexities.
+  One of the simplest topological properties is containment. The plots below show two groups of 75 points in 50 dimensional space. Both are sampled from symmetric Gaussian distributions centered at the origin, but one is 50 times more tightly dispersed than the other. The "small" distribution is in effect contained in the large one.</p>
+
+  <p></p><section class="l-page tsne-group" id="figures-09" data-id="09">
+  </section><p></p>
+
+  <p>The perplexity 30 view shows the basic topology correctly, but again t-SNE greatly exaggerates the size of the smaller group of points. At perplexity 50, there's a new phenomenon: the outer group becomes a circle, as the plot tries to depict the fact that all its points are about the same distance from the inner group. If you looked at this image alone, it would be easy to misread these outer points as a one-dimensional structure.</p>
+
+  <p>What about more complicated types of topology? This may be a subject dearer to mathematicians than to practical data analysts, but interesting low-dimensional structures are occasionally found in the wild.</p>
+
+  <p>Consider a set of points that trace a link or a knot in three dimensions. Once again, looking at multiple perplexity values gives the most complete picture. Low perplexity values give two completely separate loops; high ones show a kind of global connectivity.</p>
+
+  <p></p><section class="l-page tsne-group" id="figures-10" data-id="10">
   </section>
+  <section class="l-page tsne-group" id="figures-11" data-id="11">
+  </section><p></p>
 
-  With perplexity values in the range (5 - 50) suggested by van der Maaten & Hinton, the diagrams do show these clusters, although with very different shapes. Outside that range, things get a little weird. With perplexity 2, local variations dominate. The image for perplexity 100, with merged clusters, illustrates a pitfall: for the algorithm to operate property, the perplexity really should be smaller than the number of points. Implementations can give unexpected behavior otherwise.
+  <p>The trefoil knot is an interesting example of how multiple runs affect the outcome of t-SNE. Below are five runs of the perplexity-2 view.</p>
 
-  Each of the plots above was made with 5,000 iterations with a learning rate (often called "epsilon") of 10, and had reached a point of stability by step 5,000. How much of a difference do those values make? In our experience, the most important thing is to iterate until reaching a stable configuration.
+  <p>The algorithm settles twice on a circle, which at least preserves the intrinsic topology. But in three of the runs it ends up with three different solutions which introduce artificial breaks. Using the dot color as a guide, you can see that the first and third runs are far from each other.</p>
 
-  <section class="w-page tsne-group" id="figures-02" data-id="02">
-  </section>
+  <p></p><section class="l-page tsne-group" id="figures-12" data-id="12">
+  </section><p></p>
 
-  The images above show five different runs at perplexity 30. The first four were stopped before stability. After 10, 20, 60, and 120 steps you can see layouts with seeming 1-dimensional and even pointlike images of the clusters. If you see a t-SNE plot with strange "pinched" shapes, chances are the process was stopped too early. Unfortunately, there's no fixed number of steps that yields a stable result. Different data sets can require different numbers of iterations to converge.
+  <p>Five runs at perplexity 50, however, give results that (up to symmetry) are visually identical. Evidently some problems are easier than others to optimize.</p>
 
-  Another natural question is whether different runs with the same hyperparameters produce the same results. In this simple two-cluster example, and most of the others we discuss, multiple runs give the same global shape. Certain data sets, however, yield markedly different diagrams on different runs; we'll give an example of one of these later.
+  <p></p><section class="l-page tsne-group" id="figures-13" data-id="13">
+  </section><p></p>
 
-  From now on, unless otherwise stated, we'll show results from 5,000 iterations. That's generally enough for convergence in the (relatively small) examples in this essay. We'll keep showing a range of perplexities, however, since that seems to make a big difference in every case.
+  <hr>
 
-  ---
+  <h2>Conclusion</h2>
 
-  ## 2. Cluster sizes in a t-SNE plot mean nothing
+  <p>There's a reason that t-SNE has become so popular: it's incredibly flexible, and can often find structure where other dimensionality-reduction algorithms cannot. Unfortunately, that very flexibility makes it tricky to interpret. Out of sight from the user, the algorithm makes all sorts of adjustments that tidy up its visualizations.
+  Don't let the hidden "magic" scare you away from the whole technique, though. The good news is that by studying how t-SNE behaves in simple cases, it's possible to develop an intuition for what's going on.</p>
 
-  So far, so good. But what if the two clusters have different standard deviations, and so different sizes? (By size we mean bounding box measurements, not number of points.) Below are t-SNE plots for a mixture of Gaussians in plane, where one is 10 times as dispersed as the other.
-
-  <section class="w-page tsne-group" id="figures-03" data-id="03">
-  </section>
-
-  Surprisingly, the two clusters look about same size in the t-SNE plots.
-  What's going on? The t-SNE algorithm adapts its notion of "distance" to regional density variations in the data set. As a result, it naturally expands dense clusters, and contracts sparse ones, evening out cluster sizes. To be clear, this is a different effect than the run-of-the-mill fact that any dimensionality reduction technique will distort distances. (After all, in this example all data was two-dimensional to begin with.) Rather, density equalization happens by design and is a predictable feature of t-SNE.
-
-  The bottom line, however, is that you cannot see relative sizes of clusters in a t-SNE plot.
-
-
-
-  ---
-
-  ## 3. Distances between clusters might not mean anything
-
-  What about distances _between_ clusters? The next diagrams show three Gaussians of 50 points each, one pair being 5 times as far apart as another pair.
-
-  <section class="w-page tsne-group" id="figures-04" data-id="04">
-  </section>
-
-  At perplexity 50, the diagram gives a good sense of the global geometry. For lower perplexity values the clusters look equidistant. When the perplexity is 100, we see the global geometry fine, but one of the cluster appears, falsely, much smaller than the others.
-  Since perplexity 50 gave us a good picture in this example, can we can always set perplexity to 50 if we want to see global geometry?
-
-  Sadly, no. If we add more points to each cluster, the perplexity has to increase to compensate. Here are the t-SNE diagrams for three Gaussian clusters with 200 points each, instead of 50. Now none of the trial perplexity values gives a good result.
-
-  <section class="w-page tsne-group" id="figures-05" data-id="05">
-  </section>
-
-  It's bad news that seeing global geometry requires fine-tuning perplexity. Real-world data would probably have multiple clusters with different numbers of elements. There may not be one perplexity value that will capture distances across all clusters—and sadly perplexity is a global parameter. Fixing this problem might be an interesting area for future research.
-
-  The basic message is that distances between well-separated clusters in a t-SNE plot may mean nothing.
-
-  ---
-  ## 4. Random noise doesn't always look random.
-
-  A classic pitfall is thinking you see patterns in what is really just random data. Recognizing noise when you see it is a critical skill, but it takes time to build up the right intuitions. A tricky thing about t-SNE is that it throws a lot of existing intuition out the window.
-  The next diagrams show genuinely random data, 500 points drawn from a unit Gaussian distribution in 100 dimensions. The left image is a projection onto the first two coordinates.
-
-  <section class="w-page tsne-group" id="figures-06" data-id="06">
-  </section>
-
-  The plot with perplexity 2 seems to show dramatic clusters. If you were tuning perplexity to bring out structure in the data, you might think you'd hit the jackpot.
-
-  Of course, since we know the cloud of points was generated randomly, it has no statistically interesting clusters: those "clumps" aren't meaningful. If you look back at previous examples, low perplexity values often lead to this kind of distribution. Recognizing these clumps as random noise is an important part of reading t-SNE plots.
-
-  There's something else interesting, though, which may be a win for t-SNE. At first the perplexity 30 plot doesn't look like a Gaussian distribution at all: there's only a slight density difference across different regions of the cloud, and the points seem suspiciously evenly distributed. In fact, these features are saying useful things about high-dimensional normal distributions, which are very close to uniform distributions on a sphere: evenly distributed, with roughly equal spaces between points. Seen in this light, the t-SNE plot is more accurate than any linear projection could be.
-
-  ---
-  ## 5. You can see some shapes, sometimes
-
-  It's rare for data to be distributed in a perfectly symmetric way. Let's take a look at an axis-aligned Gaussian distribution in 50 dimensions, where the standard deviation in coordinate i is 1/i. That is, we're looking at a long-ish ellipsoidal cloud of points.
-
-  <section class="w-page tsne-group" id="figures-07" data-id="07">
-  </section>
-
-  For high enough perplexity values, the elongated shapes are easy to read. On the other hand, at low perplexity, local effects and meaningless "clumping" take center stage. More extreme shapes also come through, but again only at the right perplexity. For example, here are two clusters of 75 points each in 2D, arranged in parallel lines with a bit of noise.
-
-  <section class="w-page tsne-group" id="figures-08" data-id="08">
-  </section>
-
-  For a certain range of perplexity the long clusters look close to correct, which is reassuring.
-
-  Even in the best cases, though, there's a subtle distortion: the lines are slightly curved outwards in the t-SNE diagram. The reason is that, as usual, t-SNE tends to expand denser regions of data. Since the middles of the clusters have less empty space around them than the ends, the algorithm magnifies them.
-
-  ---
-
-  ## 6. For topology, you may need more than one plot
-
-  Sometimes you can read topological information off a t-SNE plot, but that typically requires views at multiple perplexities.
-  One of the simplest topological properties is containment. The plots below show two groups of 75 points in 50 dimensional space. Both are sampled from symmetric Gaussian distributions centered at the origin, but one is 50 times more tightly dispersed than the other. The "small" distribution is in effect contained in the large one.
-
-  <section class="w-page tsne-group" id="figures-09" data-id="09">
-  </section>
-
-  The perplexity 30 view shows the basic topology correctly, but again t-SNE greatly exaggerates the size of the smaller group of points. At perplexity 50, there's a new phenomenon: the outer group becomes a circle, as the plot tries to depict the fact that all its points are about the same distance from the inner group. If you looked at this image alone, it would be easy to misread these outer points as a one-dimensional structure.
-
-  What about more complicated types of topology? This may be a subject dearer to mathematicians than to practical data analysts, but interesting low-dimensional structures are occasionally found in the wild.
-
-  Consider a set of points that trace a link or a knot in three dimensions. Once again, looking at multiple perplexity values gives the most complete picture. Low perplexity values give two completely separate loops; high ones show a kind of global connectivity.
-
-  <section class="w-page tsne-group" id="figures-10" data-id="10">
-  </section>
-  <section class="w-page tsne-group" id="figures-11" data-id="11">
-  </section>
-
-
-  The trefoil knot is an interesting example of how multiple runs affect the outcome of t-SNE. Below are five runs of the perplexity-2 view.
-
-  The algorithm settles twice on a circle, which at least preserves the intrinsic topology. But in three of the runs it ends up with three different solutions which introduce artificial breaks. Using the dot color as a guide, you can see that the first and third runs are far from each other.
-
-  <section class="w-page tsne-group" id="figures-12" data-id="12">
-  </section>
-
-  Five runs at perplexity 50, however, give results that (up to symmetry) are visually identical. Evidently some problems are easier than others to optimize.
-
-  <section class="w-page tsne-group" id="figures-13" data-id="13">
-  </section>
-
-  ---
-
-  ## Conclusion
-
-  There's a reason that t-SNE has become so popular: it's incredibly flexible, and can often find structure where other dimensionality-reduction algorithms cannot. Unfortunately, that very flexibility makes it tricky to interpret. Out of sight from the user, the algorithm makes all sorts of adjustments that tidy up its visualizations.
-  Don't let the hidden "magic" scare you away from the whole technique, though. The good news is that by studying how t-SNE behaves in simple cases, it's possible to develop an intuition for what's going on.
 
   <!-- bring the figures to life -->
-  <dt-include src="assets/tsne-group.html"></dt-include>
+  <dt-include src="assets/tsne-group.html"><style>
+
+.tsne-group {
+  overflow: visible;
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+@media(min-width: 640px) {
+  .tsne-group {
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+}
+
+.tsne-group .original,
+.tsne-group .runner {
+  box-sizing: border-box;
+  -webkit-flex-grow: 1;
+  flex-grow: 1;
+  position: relative;
+  display: -webkit-flex;
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.tsne-group .original {
+  position: relative;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 12px;
+}
+
+@media(min-width: 640px) {
+  .tsne-group .original,
+  .tsne-group .runner {
+    display: block;
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .tsne-group .original {
+    margin-left: 0;
+    padding-right: 12px;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .tsne-group .runner {
+    margin-left: 12px;
+  }
+}
+
+.tsne-group .runner.no-click {
+  cursor: default;
+}
+
+.runner.clickable {
+  cursor: pointer;
+}
+
+.runner.clickable:hover .image {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.runner:hover i {
+  opacity: 1;
+}
+
+.runner.selected i {
+  opacity: 1;
+}
+
+.runner i {
+  font-size: 30px;
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  background-color: hsla(207, 44%, 79%, 0.8);
+  color: steelblue;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  line-height: 0;
+  width: 150px;
+  padding: 75px 0;
+  text-align: center;
+}
+
+@media(min-width: 640px) {
+  .runner i {
+    width: 100%;
+    padding: 50% 0;
+  }
+}
+
+.runner.selected .image::after {
+  content: "";
+  border: 2px solid rgba(70, 130, 180, 1);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  box-sizing: border-box;
+  border-radius: 4px;
+  z-index: 10;
+}
+
+.tsne-group .image {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
+  width: 150px;
+  padding-top: 150px;
+  background: white;
+  position: relative;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  margin-right: 12px;
+}
+
+@media(min-width: 640px) {
+  .tsne-group .image {
+    width: 100%;
+    padding-top: 100%;
+    margin-right: 0;
+  }
+}
+
+.tsne-group .original .image {
+  box-shadow: none;
+}
+
+.tsne-group .image img {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+}
+
+.tsne-group h3.caption {
+  font-size: 15px;
+  margin-top: 12px;
+}
+
+.tsne-group .caption {
+  font-size: 12px;
+  line-height: 1.6em;
+  margin-top: 12px;
+  width: 100px;
+}
+
+@media(min-width: 640px) {
+  .tsne-group .caption,
+  .tsne-group h3.caption {
+    margin-top: 8px;
+    width: 100%;
+  }
+}
+</style>
+
+<script>
+(function() {
+  var format = d3.format(",");
+  d3.selectAll("section.tsne-group").data(figures, function(d) {
+    if(!d) return this.dataset.id;
+    return d.id
+  })
+  .each(generateFigure)
+
+  function generateFigure(figure) {
+
+    var FIGURE = figure.id
+    var dis = d3.select(this)
+    var original = dis.append("div").classed("original", true)
+    original.append("div")
+        .classed("image", true)
+      .append("img")
+        .classed("tsne-plot", true)
+        .attr("src", "assets/figure_" + FIGURE + "_" + "original.png");
+    original.append("h3").classed("caption", true).text("Original")
+
+    // examples
+    var runners = dis.selectAll(".runner").data(figure.examples)
+      .enter().append("div").classed("runner", true)
+    if(!figure.noclick) {
+      runners
+        .classed("clickable", true)
+        .on("click", function(d) {
+          d3.selectAll(".runner").classed("selected", false)
+          updateStateFromFigure(figure, d, this);
+          d3.select(this).classed("selected", true)
+        });
+    } else {
+      runners.classed("no-click", true)
+    }
+
+    runners.append("div")
+        .classed("image", true)
+      .append("img")
+        .attr("src", function(d,i) {
+          return "assets/figure_" + FIGURE + "_" + d.id + ".png"
+        });
+
+    if(!figure.noclick) {
+      runners.append("i")
+        .classed("material-icons", true)
+        .text("open_in_browser")
+    }
+
+    var caption = runners.append("div").classed("caption", true);
+
+    caption.append("div").text(function(d) { return "Perplexity: " + format(d.perplexity); })
+
+    caption.append("div").text(function(d) { return "Step: " + format(d.step); })
+  }
+})()
+</script>
+</dt-include>
 
 </dt-article>
 <dt-appendix>
@@ -339,3 +1108,4 @@ section {
   url={http://www.jmlr.org/papers/volume9/vandermaaten08a/vandermaaten08a.pdf}
 }
 </script>
+</body></html>
