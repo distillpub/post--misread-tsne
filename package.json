@@ -5,6 +5,6 @@
     "d3": "^4.2.2"
   },
   "scripts": {
-    "build": "node bin/include.js > index.html"
+    "build": "node bin/include.js > public/index.html"
   }
 }
