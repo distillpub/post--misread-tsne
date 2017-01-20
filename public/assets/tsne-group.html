@@ -5,8 +5,8 @@
   display: -webkit-flex;
   display: flex;
   flex-direction: column;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin-top: 36px;
+  margin-bottom: 36px;
 }
 
 @media(min-width: 640px) {
@@ -164,7 +164,7 @@
 <script>
 (function() {
   var format = d3.format(",");
-  d3.selectAll("section.tsne-group").data(figures, function(d) {
+  d3.selectAll(".tsne-group").data(figures, function(d) {
     if(!d) return this.dataset.id;
     return d.id
   })
