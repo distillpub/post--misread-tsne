@@ -707,7 +707,7 @@ Although impressive, these images can be tempting to misread. The purpose of thi
   <div class="l-page-outset tsne-group" id="figures-01" data-id="01">
   </div>
 
-  <p>With perplexity values in the range (5 - 50) suggested by van der Maaten &amp; Hinton, the diagrams do show these clusters, although with very different shapes. Outside that range, things get a little weird. With perplexity 2, local variations dominate. The image for perplexity 100, with merged clusters, illustrates a pitfall: for the algorithm to operate property, the perplexity really should be smaller than the number of points. Implementations can give unexpected behavior otherwise.</p>
+  <p>With perplexity values in the range (5 - 50) suggested by van der Maaten &amp; Hinton, the diagrams do show these clusters, although with very different shapes. Outside that range, things get a little weird. With perplexity 2, local variations dominate. The image for perplexity 100, with merged clusters, illustrates a pitfall: for the algorithm to operate properly, the perplexity really should be smaller than the number of points. Implementations can give unexpected behavior otherwise.</p>
 
   <p>Each of the plots above was made with 5,000 iterations with a learning rate (often called "epsilon") of 10, and had reached a point of stability by step 5,000. How much of a difference do those values make? In our experience, the most important thing is to iterate until reaching a stable configuration.</p>
 
