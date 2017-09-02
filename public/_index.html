@@ -1,18 +1,33 @@
 <!doctype html>
 <meta charset="utf-8">
+<script src="http://localhost:8888/dist/template.v2.js"></script>
 <link href="material-icons.css" rel="stylesheet">
-<script type="text/front-matter">
-  title: How to Use t-SNE Effectively
-  description: Although extremely useful for visualizing high-dimensional data, t-SNE plots can sometimes be mysterious or misleading.
-  authors:
-    - Martin Wattenberg: http://hint.fm/
-    - "Fernanda Viégas": http://hint.fm/
-    - Ian Johnson: http://enjalot.github.io/
-  affiliations:
-    - Google Brain: http://g.co/brain
-    - Google Brain: http://g.co/brain
-    - Google Cloud: http://cloud.google.com
-</script>
+<d-front-matter>
+  <script type="text/json">{
+    "title": "How to Use t-SNE Effectively",
+    "description": "Although extremely useful for visualizing high-dimensional data, t-SNE plots can sometimes be mysterious or misleading.",
+    "authors": [
+      {
+        "author": "Martin Wattenberg",
+        "authorURL": "http://hint.fm/",
+        "affiliation": "Google Brain",
+        "affiliationURL": "http://g.co/brain"
+      },
+      {
+        "author": "Fernanda Viégas",
+        "authorURL": "http://hint.fm/",
+        "affiliation": "Google Brain",
+        "affiliationURL": "http://g.co/brain"
+      },
+      {
+        "author": "Ian Johnson",
+        "authorURL": "http://enjalot.github.io/",
+        "affiliation": "Google Cloud",
+        "affiliationURL": "http://cloud.google.com"
+      }
+    ]
+  }</script>
+</d-front-matter>
 
 <script src="assets/d3.min.js"></script>
 <script src="assets/tsne.js"></script>
@@ -129,14 +144,14 @@ input[type=range]:focus::-ms-fill-upper {
 
 <dt-include src="assets/tray.html"></dt-include>
 
-<dt-article>
+<d-article>
   <h1 class="l-middle">How to Use t-SNE Effectively</h1>
   <h2 class="l-middle">Although extremely useful for visualizing high-dimensional data, t-SNE plots can sometimes be mysterious or misleading. By exploring how t-SNE behaves in simple cases, we can learn to use it more effectively.</h2>
   <div class="l-page">
     <dt-include src="assets/playground.html"></dt-include>
   </div>
-  <dt-byline></dt-byline>
-  <p>A popular method for exploring high-dimensional data is something called t-SNE, introduced by <dt-cite key="maaten2008visualizing">van der Maaten and Hinton in 2008</dt-cite>. The technique has become widespread in the field of machine learning, since it has an almost magical ability to create compelling two-dimensonal "maps" from data with hundreds or even thousands of dimensions.
+  <d-byline></d-byline>
+  <p>A popular method for exploring high-dimensional data is something called t-SNE, introduced by <d-cite key="maaten2008visualizing">van der Maaten and Hinton in 2008</d-cite>. The technique has become widespread in the field of machine learning, since it has an almost magical ability to create compelling two-dimensonal "maps" from data with hundreds or even thousands of dimensions.
 Although impressive, these images can be tempting to misread. The purpose of this note is to prevent some common misreadings.</p>
 
   <p>We'll walk through a series of simple examples to illustrate what t-SNE diagrams can and cannot show. The t-SNE technique really is useful—but only if you know how to interpret it.</p>
@@ -282,8 +297,8 @@ Although impressive, these images can be tempting to misread. The purpose of thi
   <!-- bring the figures to life -->
   <dt-include src="assets/tsne-group.html"></dt-include>
 
-</dt-article>
-<dt-appendix>
+</d-article>
+<d-appendix>
 
   <h3>Acknowledgments</h3>
   <p>We are grateful to Chris Olah and Shan Carter for creating this platform, and for excellent design and editorial
@@ -295,17 +310,20 @@ Although impressive, these images can be tempting to misread. The purpose of thi
 
   <p>Edited on Oct. 18, 2016 to describe and correct issues when perplexity is defined to be larger than the number of points. Thanks to Laurens van der Maaten for pointing this out.</p>
 
-</dt-appendix>
+  <d-footnote-list></d-footnote-list>
 
-<script type="text/bibliography">
-@article{maaten2008visualizing,
-  title={Visualizing data using t-SNE},
-  author={Maaten, Laurens van der and Hinton, Geoffrey},
-  journal={Journal of Machine Learning Research},
-  volume={9},
-  number={Nov},
-  pages={2579--2605},
-  year={2008},
-  url={http://www.jmlr.org/papers/volume9/vandermaaten08a/vandermaaten08a.pdf}
-}
-</script>
+  <d-bibliography>
+    <script type="text/bibtex">
+    @article{maaten2008visualizing,
+      title={Visualizing data using t-SNE},
+      author={Maaten, Laurens van der and Hinton, Geoffrey},
+      journal={Journal of Machine Learning Research},
+      volume={9},
+      number={Nov},
+      pages={2579--2605},
+      year={2008},
+      url={http://www.jmlr.org/papers/volume9/vandermaaten08a/vandermaaten08a.pdf}
+    }
+    </script>
+  </d-bibliography>
+</d-appendix>

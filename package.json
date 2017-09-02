@@ -1,11 +1,14 @@
 {
   "main": "index.md",
   "name": "misread-tsne",
+  "scripts": {
+    "build": " cp -rf node_modules/material-design-icons/iconfont/ public/ && node bin/include.js > public/index.html",
+    "serve": "python3 -m http.server --bind localhost"
+
+  },
   "dependencies": {
     "d3": "^4.2.2",
+    "jsdom": "^11.2.0",
     "material-design-icons": "^3.0.1"
-  },
-  "scripts": {
-    "build": " cp -rf node_modules/material-design-icons/iconfont/ public/ && node bin/include.js > public/index.html"
   }
 }

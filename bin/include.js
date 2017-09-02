@@ -1,9 +1,9 @@
 var fs = require("fs"),
     path = require("path"),
-    jsdom = require("jsdom").jsdom,
-    serializeDocument = require("jsdom").serializeDocument;
+    jsdom = require("jsdom");
 
-let index = jsdom(fs.readFileSync("public/_index.html", "utf8"), {features: {ProcessExternalResources: false, FetchExternalResources: false}});
+const { JSDOM } = jsdom;
+
 
 function renderIncludes(dom) {
   let includes = [].slice.apply(dom.querySelectorAll("dt-include"));
@@ -15,5 +15,6 @@ function renderIncludes(dom) {
   });
 }
 
-renderIncludes(index);
-process.stdout.write(serializeDocument(index));
+let index = new JSDOM(fs.readFileSync("public/_index.html", "utf8"), {features: {ProcessExternalResources: false, FetchExternalResources: false}});
+renderIncludes(index.window.document);
+process.stdout.write(index.serialize());
